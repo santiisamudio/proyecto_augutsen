@@ -24,9 +24,15 @@ public class ListenerTuio implements TuioListener{
     private ImageView _imagen;//sirve para mostrar imagenes
     private HashMap<Long, Circle> _circulos = new HashMap<>();
     private HashMap<Long, Arc> _semicirculos= new HashMap<>();
+    private int _nivel;
+    private boolean _primerParte=false;
+    private boolean _segundaParte=false;
+    private boolean _tercerParte=false;
+    private boolean _cuartaParte=false;
     
     
     public ListenerTuio(Pane contenedor) {
+    	this._nivel= 0;
         this._contenedor = contenedor;
         this._imagen = new ImageView();
         this._contenedor.getChildren().add(this._imagen);//se agrega la imagen al contenedor
@@ -43,27 +49,22 @@ public class ListenerTuio implements TuioListener{
             double x = to.getX() * this._contenedor.getWidth();/*TUIO usa coordenadas de 0.0(arriba izquierda) a 1.1(abajo derecha) el contenedor de javafx tiene como coordenadas
                                                                     pixeles, para convertirlo se multiplican, si x=0.5 , 0.5 * 800 pixeles = 400*/
             double y = to.getY() * this._contenedor.getHeight();
-            this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());
-            Circle circulo = this._circulos.get(to.getSessionID());
-            circulo.setVisible(false);
-            /*
-            if(id_simbolo == 3){//el simbolo fiducial 3 se usa para establecer los valores segun su angulo en grados
-                if(esCuadranteInferiorIzquierdo(to.getX(),to.getY())){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la izquierda
-                   this.CrearSemicirculoValores(id_simbolo,x,y,to.getSessionID());//crea el semicirculo en donde se encuentra el simbolo fiducial
-                }
-                   
-            }
-            else {*/
-                if(esCuadranteCentroMapa(to.getX(),to.getY())){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha
+           // this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());
+            //Circle circulo = this._circulos.get(to.getSessionID());
+            //circulo.setVisible(false);
+            
+                if((this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha
                     
                 	
-                	
+                	this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());
+                    Circle circulo = this._circulos.get(to.getSessionID());
                 	
                 	circulo.setVisible(true);
-                	//this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());//crea el semicirculo en donde se encuentra el simbolo fiducial
-                    
-                    //this.reaccionarSimboloSimple(id_simbolo);
+                	
+                }else if((this._nivel==1)&&(esCuadranteInferiorIzquierdo(to.getX(),to.getY()))){
+                	this.CrearSemicirculoValores(to.getSymbolID(), x, y, to.getSessionID());
                 }
+                //
          //   }
             
 
@@ -75,7 +76,7 @@ public class ListenerTuio implements TuioListener{
     }
     
     private boolean esCuadranteInferiorIzquierdo(double x, double y){
-        return ((x<0.5)&&(y>0.5));
+        return ((x>0.0195)&&(x<0.210)&&(y>0.6571)&&(y<0.930));
     }
     
     private boolean esCuadranteInferiorDerecho(double x, double y){
@@ -141,6 +142,87 @@ public class ListenerTuio implements TuioListener{
         
         System.out.println("Mostrando imagen para ID " + id + ": " + this._imagen);
     }
+    
+    private void seEncuentraPrimerParte() {
+    	this._primerParte= true;
+    }
+    
+    private void seEncuentraSegundaParte() {
+    	this._segundaParte= true;
+    }
+    
+    private void seEncuentraTercerParte() {
+    	this._tercerParte=true;
+    }
+    
+    private void seEncuentraCuartaParte() {
+    	this._cuartaParte=true;
+    }
+    
+    private void seEliminaPrimerParte() {
+    	this._primerParte=false;
+    }
+    
+    private void seEliminaSegundaParte() {
+    	this._segundaParte=false;
+    }
+    
+    private void seEliminaTercerParte() {
+    	this._tercerParte=false;
+    }
+    
+    private void seEliminaCuartaParte() {
+    	this._cuartaParte=false;
+    }
+    
+    private void agregarMapa(int id) {
+    	switch(id) {
+    	case 0: seEncuentraPrimerParte();
+    		System.out.println("agregado");
+    		break;
+    	case 1: seEncuentraSegundaParte();
+    		System.out.println("agregado");
+			break;
+    	case 2: seEncuentraTercerParte();
+    		System.out.println("agregado");
+    		break;
+    	case 4: seEncuentraCuartaParte();
+    		System.out.println("agregado");
+			break;
+    	
+    	}
+    }
+    
+    private void eliminarMapa(int id) {
+    	switch(id) {
+    	case 0: seEliminaPrimerParte();
+    		System.out.println("eliminado");
+    		break;
+    	case 1: seEliminaSegundaParte();
+    		System.out.println("eliminado");
+			break;
+    	case 2: seEliminaTercerParte();
+    		System.out.println("eliminado");
+			break;
+    	case 4: seEliminaCuartaParte();
+    		System.out.println("eliminado");
+			break;
+    	
+    	}
+    }
+    
+    private void habilitarImagenAugutsen() {
+    	Image img = new Image(getClass().getResource("/imagenes/2_panel_sinEmocion.png").toExternalForm());
+    	this._imagen.setImage(img);
+    }
+    
+    private void controlMapa() {
+    	if((this._primerParte==true)&&(this._segundaParte==true)&&(this._tercerParte==true)&&(this._cuartaParte==true)) {
+    		this._nivel++;
+    		habilitarImagenAugutsen();
+    	}
+    }
+    
 
     @Override
     public void updateTuioObject(TuioObject obj) {//esta funcion actualiza automaticamente el objeto cuando se detecta movimiento en el mismo. la maneja TUIO internamente
@@ -148,24 +230,26 @@ public class ListenerTuio implements TuioListener{
         double y = obj.getY();
         
         Platform.runLater(() -> {// al actualizar la UI de javafx se debe pasar al thread principal
-            if((obj.getSymbolID()!= 3)&&(esCuadranteCentroMapa(x,y))){//solo se actualiza dentro del cuadrante abajo derecha, sino no se muestra el simbolo
+            if((this._nivel==0)&&(esCuadranteCentroMapa(x,y))){//solo se actualiza dentro del cuadrante abajo derecha, sino no se muestra el simbolo
                 Circle circulo = this._circulos.get(obj.getSessionID());//se busca el circulo correspondiente al objeto
                 if (circulo != null) {//verifica que el objeto exista 
                 	circulo.setVisible(true);
                     circulo.setCenterX(obj.getX() * this._contenedor.getWidth());// se actualiza x
                     circulo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
+                    this.agregarMapa(obj.getSymbolID());
+                    this.controlMapa();
                     //this.reaccionarSimboloSimple(obj.getSymbolID());
-                }else if((obj.getSymbolID()!= 3)&&(!esCuadranteCentroMapa(x,y))) {
+                }else if((this._nivel==0)&&(!esCuadranteCentroMapa(x,y))) {
                 	circulo.setVisible(false);
                 }
-            }else if(esCuadranteInferiorIzquierdo(x,y)){//solo se actualiza dentro del cuadrante abajo izquierda, sino no se muestra el simbolo
-                Arc semicirculo = this._semicirculos.get(obj.getSessionID());
-                if(semicirculo != null){//verifica que el objeto exista 
-                    semicirculo.setCenterX(obj.getX() * this._contenedor.getWidth());//se actualiza x
-                    semicirculo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
-                    this.reaccionarConRotacion(obj.getAngleDegrees(),semicirculo);//actualiza rotacion
-                    
-                }
+            
+            }else if((this._nivel==1)&&(esCuadranteInferiorIzquierdo(x,y))){
+            	Arc semicirculo = this._semicirculos.get(obj.getSessionID());
+                	if(semicirculo != null){//verifica que el objeto exista 
+                		semicirculo.setCenterX(obj.getX() * this._contenedor.getWidth());//se actualiza x
+                		semicirculo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
+                		this.reaccionarConRotacion(obj.getAngleDegrees(),semicirculo);//actualiza rotacion
+            }
             }
         });
     
@@ -176,8 +260,12 @@ public class ListenerTuio implements TuioListener{
         //dependiendo el angulo cambia el color
         if (angulo >= 0 && angulo < 120) {
                     semicirculo.setFill(Color.RED);
+                    Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
+                	this._imagen.setImage(img);
                 } else if (angulo >= 120 && angulo < 240) {
                     semicirculo.setFill(Color.GREEN);
+                    Image img = new Image(getClass().getResource("/imagenes/4_panel_alegria_esperandoObjeto.png").toExternalForm());
+                	this._imagen.setImage(img);
                 } else {
                     semicirculo.setFill(Color.BLUE);
                 }
@@ -192,6 +280,7 @@ public class ListenerTuio implements TuioListener{
                 Circle circulo = this._circulos.remove(idSesion);//elimina el circulo del hashmap
                 if (circulo != null) {
                     this._contenedor.getChildren().remove(circulo);//elimina al circulo del contenedor pane
+                    eliminarMapa(obj.getSymbolID());
                 }
             }else{
                 Arc semicirculo = this._semicirculos.remove(idSesion);//elimina el semicirculo del hashmap
