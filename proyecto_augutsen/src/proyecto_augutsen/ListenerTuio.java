@@ -66,7 +66,8 @@ public class ListenerTuio implements TuioListener{
                     	circulo.setVisible(true);
                         circulo.setCenterX(to.getX() * this._contenedor.getWidth());// se actualiza x
                         circulo.setCenterY(to.getY() * this._contenedor.getHeight());//se actualiza y
-                        this.agregarMapa(to.getSymbolID());
+                     // version santi   this.agregarMapa(to.getSymbolID());
+                        this.agregarMapa(to.getSymbolID(),to.getX(),to.getY(),to.getAngleDegrees());
                         this.controlMapa();
                 	}
                    
@@ -95,9 +96,6 @@ public class ListenerTuio implements TuioListener{
         return ((x>0.0195)&&(x<0.210)&&(y>0.6570)&&(y<0.930));
     }
     
-    private boolean esCuadranteInferiorDerecho(double x, double y){
-        return ((x>0.5) && (y> 0.5));
-    }
     
     private void CrearSemicirculoValores(int id,double x, double y, long idSesion){
         if(id == 3){
@@ -164,7 +162,9 @@ public class ListenerTuio implements TuioListener{
                 	circulo.setVisible(true);
                     circulo.setCenterX(obj.getX() * this._contenedor.getWidth());// se actualiza x
                     circulo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
-                    this.agregarMapa(obj.getSymbolID());
+                   // VERSION SANTI this.agregarMapa(obj.getSymbolID());
+                    this.agregarMapa(obj.getSymbolID(),obj.getX(),obj.getY(),obj.getAngleDegrees());
+                    System.out.println(obj.getSymbolID());
                     this.controlMapa();
                     //this.reaccionarSimboloSimple(obj.getSymbolID());
                 }else if((this._nivel==0)&&(!esCuadranteCentroMapa(x,y))) {
@@ -261,18 +261,22 @@ public class ListenerTuio implements TuioListener{
     
     private void seEncuentraPrimerParte() {
     	this._primerParte= true;
+    	System.out.println("agregado");
     }
     
     private void seEncuentraSegundaParte() {
     	this._segundaParte= true;
+    	System.out.println("agregado");
     }
     
     private void seEncuentraTercerParte() {
     	this._tercerParte=true;
+    	System.out.println("agregado");
     }
     
     private void seEncuentraCuartaParte() {
     	this._cuartaParte=true;
+    	System.out.println("agregado");
     }
     
     private void seEliminaPrimerParte() {
@@ -290,25 +294,54 @@ public class ListenerTuio implements TuioListener{
     private void seEliminaCuartaParte() {
     	this._cuartaParte=false;
     }
+   
     
-    private void agregarMapa(int id) {
-    	switch(id) {
-    	case 0: seEncuentraPrimerParte();
-    		System.out.println("agregado");
-    		break;
-    	case 1: seEncuentraSegundaParte();
-    		System.out.println("agregado");
-			break;
-    	case 2: seEncuentraTercerParte();
-    		System.out.println("agregado");
-    		break;
-    	case 4: seEncuentraCuartaParte();
-    		System.out.println("agregado");
-			break;
-    	
-    	}
+    private void agregarMapa(int id, double x, double y, float angulo) { 
+        switch(id) {
+            case 0: 
+                if ((x > 0.1674) && (x < 0.5) && (y > 0.1241) && (y < 0.5)) {
+                    if (angulo >= 90 && angulo < 180) {
+                    	System.out.println(angulo);
+                    	seEncuentraPrimerParte();
+                    }
+                }
+                break;
+            case 1: 
+            	
+                if ((x > 0.5) && (x < 0.8330) && (y > 0.1241) && (y < 0.5)) {
+                	System.out.println("case 1");
+                    if (angulo >= 180 && angulo < 270) {
+                    	System.out.println(angulo);
+                    	seEncuentraSegundaParte();
+                    }
+                }
+                break;
+            case 2: 
+           
+                if ((x > 0.1674) && (x < 0.5) && (y > 0.5) && (y < 0.8878)) {
+                    if (angulo >= 0 && angulo < 90) {
+                    	System.out.println(angulo);
+                    	seEncuentraTercerParte();
+                    }
+                }
+                break;
+            case 4: 
+          
+                if ((x > 0.5) && (x < 0.8330) && (y > 0.5) && (y < 0.8878)) {
+                	System.out.println("case 4");
+                    if ((angulo >= 270) && (angulo < 360)) {
+                    	
+                    	System.out.println(angulo);
+                      	seEncuentraCuartaParte();
+                    }
+                }
+                break;
+            default:
+                System.out.println("ID no válido");
+                break;
+        }
     }
-    
+
     private void eliminarMapa(int id) {
     	switch(id) {
     	case 0: seEliminaPrimerParte();
