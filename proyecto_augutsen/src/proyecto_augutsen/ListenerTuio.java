@@ -7,13 +7,11 @@ import TUIO.TuioObject;
 import TUIO.TuioTime;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
+import javafx.stage.Screen;
+
 
 /**
  *
@@ -22,21 +20,29 @@ import javafx.scene.shape.ArcType;
 public class ListenerTuio implements TuioListener{
     private Pane _contenedor;//contenedor
     private ImageView _imagen;//sirve para mostrar imagenes
-    private HashMap<Long, Circle> _circulos = new HashMap<>();
-    private HashMap<Long, Arc> _semicirculos= new HashMap<>();
+    private HashMap<Long, ImageView> _imagenes = new HashMap<>();
     private int _nivel;
     private boolean _primerParte=false;
     private boolean _segundaParte=false;
     private boolean _tercerParte=false;
     private boolean _cuartaParte=false;
+    private AplicacionMain _main;
     
     
-    public ListenerTuio(Pane contenedor) {
+    public ListenerTuio(Pane contenedor,AplicacionMain main) {
     	this._nivel= 0;
+    	this._main= main;
         this._contenedor = contenedor;
+        double ancho = Screen.getPrimary().getVisualBounds().getWidth();
+        double alto = Screen.getPrimary().getVisualBounds().getHeight();
         this._imagen = new ImageView();
+        this._imagen.setPreserveRatio(false);
+        this._imagen.setFitWidth(ancho);
+        this._imagen.setFitHeight(alto);
+        this._imagen.setId("background");
         this._contenedor.getChildren().add(this._imagen);//se agrega la imagen al contenedor
         this.AsignarImagenInicial();
+        
         
     }
     
@@ -49,24 +55,23 @@ public class ListenerTuio implements TuioListener{
             double x = to.getX() * this._contenedor.getWidth();/*TUIO usa coordenadas de 0.0(arriba izquierda) a 1.1(abajo derecha) el contenedor de javafx tiene como coordenadas
                                                                     pixeles, para convertirlo se multiplican, si x=0.5 , 0.5 * 800 pixeles = 400*/
             double y = to.getY() * this._contenedor.getHeight();
-           // this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());
-            //Circle circulo = this._circulos.get(to.getSessionID());
-            //circulo.setVisible(false);
-            this.CrearCirculoNormal(id_simbolo,x,y,to.getSessionID());
-            Circle circulo = this._circulos.get(to.getSessionID());  	
+
         	
-        	
-        	this.CrearSemicirculoValores(to.getSymbolID(), x, y, to.getSessionID());
-        	Arc semicirculo = this._semicirculos.get(to.getSessionID());
-        	
+        	this.CrearImagen(id_simbolo, x, y, to.getSessionID());
+        	ImageView imageV = this._imagenes.get(to.getSessionID()); 
         	
                 if((to.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha
                     
-                	if (circulo != null) {//verifica que el objeto exista 
-                    	circulo.setVisible(true);
-                        circulo.setCenterX(to.getX() * this._contenedor.getWidth());// se actualiza x
-                        circulo.setCenterY(to.getY() * this._contenedor.getHeight());//se actualiza y
-                     // version santi   this.agregarMapa(to.getSymbolID());
+                	if (imageV != null) {//verifica que el objeto exista 
+                
+                		imageV.setVisible(true);
+                        imageV.setX(to.getX() * this._contenedor.getWidth());  // Posición X de la imagen
+                        imageV.setY(to.getY() * this._contenedor.getHeight());  // Posición Y de la imagen
+                		System.out.println("Número de nodos en el contenedor: " + _contenedor.getChildren().size());
+                        
+                        
+                        
+                        
                         this.agregarMapa(to.getSymbolID(),to.getX(),to.getY(),to.getAngleDegrees());
                         this.controlMapa();
                 	}
@@ -74,11 +79,11 @@ public class ListenerTuio implements TuioListener{
                 }else if((to.getSymbolID()==3)&&(this._nivel==1)&&(esCuadranteInferiorIzquierdo(to.getX(),to.getY()))){
                 	
                 	
-                	if(semicirculo != null){//verifica que el objeto exista 
-                		semicirculo.setVisible(true);
-                		semicirculo.setCenterX(to.getX() * this._contenedor.getWidth());//se actualiza x
-                		semicirculo.setCenterY(to.getY() * this._contenedor.getHeight());//se actualiza y
-                		this.reaccionarConRotacion(to.getAngleDegrees(),semicirculo);//actualiza rotacion
+                	if(imageV != null){//verifica que el objeto exista 
+                		imageV.setVisible(true);
+                		imageV.setX(to.getX() * this._contenedor.getWidth());//se actualiza x
+                		imageV.setY(to.getY() * this._contenedor.getHeight());//se actualiza y
+                		this.reaccionarConRotacion(to.getAngleDegrees());//actualiza rotacion
             }
                 }
                 //
@@ -96,99 +101,110 @@ public class ListenerTuio implements TuioListener{
         return ((x>0.0195)&&(x<0.210)&&(y>0.6570)&&(y<0.930));
     }
     
-    
-    private void CrearSemicirculoValores(int id,double x, double y, long idSesion){
-        if(id == 3){
-            Arc semiCirculo = new Arc();
-                semiCirculo.setCenterX(x);//se ubica el semicirculo en la ubicacion del simbolo fiducial
-                semiCirculo.setCenterY(y);
-                semiCirculo.setRadiusX(20);//se define el tamaño
-                semiCirculo.setRadiusY(20);
-                semiCirculo.setStartAngle(0);//se define como 0 el angulo en donde comienza el semicirculo
-                semiCirculo.setLength(180);//cuanto se extiende el semicirculo en grados
-                semiCirculo.setType(ArcType.ROUND);//el arco se cierra con borde redondeado
-                semiCirculo.setFill(Color.BLUE);//color por defecto
-                semiCirculo.setVisible(false);//visible
-                
-                
-                this._semicirculos.put(idSesion, semiCirculo);//se asigna al semicirculo el sessionid del objeto que se esta mostrando
-                this._contenedor.getChildren().add(semiCirculo);//se agrega al contenedor pane el semicirculo
-        }
-    }
-    private void CrearCirculoNormal(int id,double x, double y, long idSesion){
-        Circle circulo = new Circle(x, y, 50, Color.TRANSPARENT);//se crea el circulo
-                circulo.setStroke(Color.RED);//color del borde
-                circulo.setStrokeWidth(3);//tamaño del borde
-                circulo.setVisible(false);//visible
-
-                this._circulos.put(idSesion, circulo);//asigno el circulo al objeto añadido
-                this._contenedor.getChildren().add(circulo);//agrego el circulo al pane
-                
+    private void CrearImagen(int id,double x, double y, long idSesion) {
+    	Image img = new Image(getClass().getResource("/imagenes/rompecabezas.png").toExternalForm());
+        ImageView imageV = new ImageView(img); 
+        imageV.setId("pieza");
+        imageV.setX(x);  // Posición X de la imagen
+        imageV.setY(y);  // Posición Y de la imagen
+        imageV.setVisible(false);
+        imageV.setFitWidth(100);  // Ajusta el tamaño de la imagen
+        imageV.setFitHeight(100);  // Ajusta el tamaño de la imagen
+        imageV.setPreserveRatio(true);  // Mantiene la relación de aspecto
+        
+        this._imagenes.put(idSesion, imageV);  // Guardamos el ImageView en el mapa
+        this._contenedor.getChildren().add(imageV);  // Agregamos la imagen al contenedor
+        
     }
     
     private void AsignarImagenInicial() {
     	Image img = new Image(getClass().getResource("/imagenes/1_inicialRompecabezas.png").toExternalForm());
     	this._imagen.setImage(img);
     	
-    }
-    
+    } 
 
     
     private void habilitarImagenAugutsen() {
     	Image img = new Image(getClass().getResource("/imagenes/2_panel_sinEmocion.png").toExternalForm());
+    	
+    	System.out.print("habilitado");
     	this._imagen.setImage(img);
+    	Platform.runLater(() ->this._main.iniciarVideo());
+    	
+    	
     }
     
     private void controlMapa() {
     	if((this._primerParte==true)&&(this._segundaParte==true)&&(this._tercerParte==true)&&(this._cuartaParte==true)) {
     		this._nivel++;
     		habilitarImagenAugutsen();
-    		this._contenedor.getChildren().removeIf(node -> node instanceof Circle);
-    		this._circulos.clear();
+    		this._contenedor.getChildren().removeIf(node -> node instanceof ImageView && !node.getId().equals("background"));
+    		this._imagenes.clear();
     	}
     }
     
-
-    @Override
-    public void updateTuioObject(TuioObject obj) {//esta funcion actualiza automaticamente el objeto cuando se detecta movimiento en el mismo. la maneja TUIO internamente
+   
+    
+    
+    
+    @Override   
+    public void updateTuioObject(TuioObject obj) { 
         double x = obj.getX();
         double y = obj.getY();
-        
-        Platform.runLater(() -> {// al actualizar la UI de javafx se debe pasar al thread principal
-            if((obj.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(x,y))){//solo se actualiza dentro del cuadrante abajo derecha, sino no se muestra el simbolo
-                
-            	Circle circulo = this._circulos.get(obj.getSessionID());//se busca el circulo correspondiente al objeto
-                if (circulo != null) {//verifica que el objeto exista 
-                	circulo.setVisible(true);
-                    circulo.setCenterX(obj.getX() * this._contenedor.getWidth());// se actualiza x
-                    circulo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
-                   // VERSION SANTI this.agregarMapa(obj.getSymbolID());
-                    this.agregarMapa(obj.getSymbolID(),obj.getX(),obj.getY(),obj.getAngleDegrees());
-                    System.out.println(obj.getSymbolID());
-                    this.controlMapa();
-                    //this.reaccionarSimboloSimple(obj.getSymbolID());
-                }else if((this._nivel==0)&&(!esCuadranteCentroMapa(x,y))) {
-                	circulo.setVisible(false);
-                }
-            
-            }else if((this._nivel==1)&&(esCuadranteInferiorIzquierdo(x,y))){
-            	Arc semicirculo = this._semicirculos.get(obj.getSessionID());
-                	if(semicirculo != null){//verifica que el objeto exista 
-                		semicirculo.setVisible(true);
-                		semicirculo.setCenterX(obj.getX() * this._contenedor.getWidth());//se actualiza x
-                		semicirculo.setCenterY(obj.getY() * this._contenedor.getHeight());//se actualiza y
-                		this.reaccionarConRotacion(obj.getAngleDegrees(),semicirculo);//actualiza rotacion
-                	}else if((this._nivel==1)&&(!esCuadranteCentroMapa(x,y))) {
-                    	semicirculo.setVisible(false);
+        double angle = obj.getAngleDegrees();  // Guardamos el ángulo para comparar cambios
+
+        Platform.runLater(() -> {  
+            ImageView imageV = this._imagenes.get(obj.getSessionID());
+
+            if (imageV != null) {
+                if (obj.getSymbolID() != 3) {
+                    if (this._nivel == 0) {
+                        boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
+
+                        // Solo actualizar si hay cambios para evitar repaints innecesarios
+                        if (dentroDelCuadrante) {
+                            
+                            imageV.setVisible(true);
+                            
+                            imageV.setX(x * this._contenedor.getWidth());
+                            imageV.setY(y * this._contenedor.getHeight());
+
+                            this.agregarMapa(obj.getSymbolID(), x, y, obj.getAngleDegrees());
+                            this.controlMapa();
+                        } else {
+                            imageV.setVisible(false);
+                            this.eliminarMapa(obj.getSymbolID());
+                            
+                        }
                     }
+                } else { // Si el símbolo es 3
+                    if (this._nivel == 1) {
+                        boolean dentroDelCuadrante = esCuadranteInferiorIzquierdo(x, y);
+
+                        if (dentroDelCuadrante) {
+                            imageV.setVisible(true);
+                            imageV.setX(x * this._contenedor.getWidth());
+                            imageV.setY(y * this._contenedor.getHeight());
+
+                            // Evitar actualizaciones constantes de rotación si el cambio es mínimo
+                            double anguloActual = imageV.getRotate();
+                            if (Math.abs(anguloActual - angle) > 1) { 
+                               // imageV.setRotate(angle);
+                                this.reaccionarConRotacion(obj.getAngleDegrees());
+                            }
+                        } else {
+                              imageV.setVisible(false);
+                            
+                        }
+                    }
+                }
             }
         });
-    
     }
     
-    private void reaccionarConRotacion(float angulo, Arc semicirculo){
+    
+    private void reaccionarConRotacion(float angulo){
         
-        //dependiendo el angulo cambia el color
         		if (angulo >= 0 && angulo < 60) {
                     
                     Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
@@ -218,21 +234,27 @@ public class ListenerTuio implements TuioListener{
         long idSesion= obj.getSessionID();
          Platform.runLater(() -> {
             if(obj.getSymbolID()!=3){
-                Circle circulo = this._circulos.remove(idSesion);//elimina el circulo del hashmap
-                if (circulo != null) {
-                    this._contenedor.getChildren().remove(circulo);//elimina al circulo del contenedor pane
-                    eliminarMapa(obj.getSymbolID());
+            	ImageView imageV = this._imagenes.remove(idSesion);
+               
+                if (imageV != null) {
+                	
+                    this._contenedor.getChildren().remove(imageV);//elimina al circulo del contenedor pane
+                    
+                    
+                    eliminarMapa(obj.getSymbolID());	
+                    
                 }
             }else{
-                Arc semicirculo = this._semicirculos.remove(idSesion);//elimina el semicirculo del hashmap
-                if (semicirculo != null) {
-                    this._contenedor.getChildren().remove(semicirculo);//elimina al circulo del contenedor pane
+                ImageView imageV = this._imagenes.remove(idSesion);//elimina el semicirculo del hashmap
+                if (imageV != null) {
+                    this._contenedor.getChildren().remove(imageV);//elimina al circulo del contenedor pane
                 }
             }   
         }
-         );
+         )
+;
     
-    }
+}
 
     @Override
     public void addTuioCursor(TuioCursor tc) {
@@ -261,22 +283,22 @@ public class ListenerTuio implements TuioListener{
     
     private void seEncuentraPrimerParte() {
     	this._primerParte= true;
-    	System.out.println("agregado");
+    	
     }
     
     private void seEncuentraSegundaParte() {
     	this._segundaParte= true;
-    	System.out.println("agregado");
+    	
     }
     
     private void seEncuentraTercerParte() {
     	this._tercerParte=true;
-    	System.out.println("agregado");
+    	
     }
     
     private void seEncuentraCuartaParte() {
     	this._cuartaParte=true;
-    	System.out.println("agregado");
+    	
     }
     
     private void seEliminaPrimerParte() {
@@ -309,7 +331,7 @@ public class ListenerTuio implements TuioListener{
             case 1: 
             	
                 if ((x > 0.5) && (x < 0.8330) && (y > 0.1241) && (y < 0.5)) {
-                	System.out.println("case 1");
+                	
                     if (angulo >= 180 && angulo < 270) {
                     	System.out.println(angulo);
                     	seEncuentraSegundaParte();
@@ -328,7 +350,7 @@ public class ListenerTuio implements TuioListener{
             case 4: 
           
                 if ((x > 0.5) && (x < 0.8330) && (y > 0.5) && (y < 0.8878)) {
-                	System.out.println("case 4");
+                	
                     if ((angulo >= 270) && (angulo < 360)) {
                     	
                     	System.out.println(angulo);
@@ -342,19 +364,20 @@ public class ListenerTuio implements TuioListener{
         }
     }
 
+    
     private void eliminarMapa(int id) {
     	switch(id) {
     	case 0: seEliminaPrimerParte();
-    		System.out.println("eliminado");
+    		
     		break;
     	case 1: seEliminaSegundaParte();
-    		System.out.println("eliminado");
+    		
 			break;
     	case 2: seEliminaTercerParte();
-    		System.out.println("eliminado");
+    		
 			break;
     	case 4: seEliminaCuartaParte();
-    		System.out.println("eliminado");
+    		
 			break;
     	
     	}
