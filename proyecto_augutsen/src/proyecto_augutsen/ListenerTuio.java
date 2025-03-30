@@ -27,9 +27,15 @@ public class ListenerTuio implements TuioListener{
     private boolean _tercerParte=false;
     private boolean _cuartaParte=false;
     private AplicacionMain _main;
+    private boolean[] _emocion;// 1alegria,2miedo,3enojo,4tristeza,5asco,6sorpresa
+    private String imagenEmocionActual= "vacio";
     
     
     public ListenerTuio(Pane contenedor,AplicacionMain main) {
+    	this._emocion = new boolean[6];
+    	for(int i=0;i<5;i++) {
+    		this._emocion[i]= false;
+    	}
     	this._nivel= 0;
     	this._main= main;
         this._contenedor = contenedor;
@@ -117,6 +123,20 @@ public class ListenerTuio implements TuioListener{
         
     }
     
+    private void agregarIcono(double x, double y,String link) {
+    	Image img = new Image(getClass().getResource(link).toExternalForm());
+        ImageView imageV = new ImageView(img); 
+        imageV.setId("icono");
+        imageV.setX(x * this._contenedor.getWidth());  // Posición X de la imagen
+        imageV.setY(y * this._contenedor.getHeight());  // Posición Y de la imagen
+        imageV.setVisible(true);
+        imageV.setFitWidth(60);  // Ajusta el tamaño de la imagen
+        imageV.setFitHeight(60);  // Ajusta el tamaño de la imagen
+        imageV.setPreserveRatio(true);  // Mantiene la relación de aspecto
+        
+        this._contenedor.getChildren().add(imageV);  // Agregamos la imagen al contenedor
+    }
+    
     private void AsignarImagenInicial() {
     	Image img = new Image(getClass().getResource("/imagenes/1_inicialRompecabezas.png").toExternalForm());
     	this._imagen.setImage(img);
@@ -158,7 +178,7 @@ public class ListenerTuio implements TuioListener{
 
             if (imageV != null) {
                 if (obj.getSymbolID() != 3) {
-                    if (this._nivel == 0) {
+                    if (this._nivel == 0) {	
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
 
                         // Solo actualizar si hay cambios para evitar repaints innecesarios
@@ -174,8 +194,13 @@ public class ListenerTuio implements TuioListener{
                         } else {
                             imageV.setVisible(false);
                             this.eliminarMapa(obj.getSymbolID());
-                            
-                        }
+                            }
+                    		}else{
+                    
+                    			 if(this.esCuadranteCentroMapa(x, y)) {
+                    				System.out.print("entra al if");
+                    				this.detectarObjetoEmocion(obj.getSymbolID());
+                    			 }
                     }
                 } else { // Si el símbolo es 3
                     if (this._nivel == 1) {
@@ -191,16 +216,69 @@ public class ListenerTuio implements TuioListener{
                             if (Math.abs(anguloActual - angle) > 1) { 
                                // imageV.setRotate(angle);
                                 this.reaccionarConRotacion(obj.getAngleDegrees());
+                              
                             }
-                        } else {
-                              imageV.setVisible(false);
                             
+                        }
+                        else {
+                        	imageV.setVisible(false);
                         }
                     }
                 }
             }
         });
     }
+    
+    private void detectarObjetoEmocion(int idObjeto) {
+    	String emocion = this.imagenEmocionActual;
+    	switch (idObjeto) {
+        case 6:
+            if (emocion.equals("alegria")){
+            	this._emocion[0]=true;
+            	this.agregarIcono(0.865, 0.190, "/iconos/alegria_carita.png");
+            	System.out.print("agregado");
+            }
+            break;
+        case 7:
+        	if (emocion.equals("enojo")){
+            	this._emocion[1]=true;
+            	this.agregarIcono(0.930, 0.220, "/iconos/ira_carita.png");
+            	System.out.print("agregado");
+            }
+            break;
+        case 8:
+        	if (emocion.equals("miedo")){
+            	this._emocion[2]=true;
+            	this.agregarIcono(0.800, 0.220, "/iconos/miedo_carita.png");
+            	System.out.print("agregado");
+            }
+            break;
+        case 9:
+        	if (emocion.equals("tristeza")){
+            	this._emocion[3]=true;
+            	this.agregarIcono(0.865, 0.400, "/iconos/tristeza_carita.png");
+            	System.out.print("agregado");
+            }
+            break;
+        case 10:
+        	if (emocion.equals("asco")){
+            	this._emocion[4]=true;
+            	this.agregarIcono(0.930, 0.350, "/iconos/asco_carita_.png");
+            	System.out.print("agregado");
+            }
+            break;
+        case 11:
+        	if (emocion.equals("sorpresa")){
+            	this._emocion[5]=true;
+            	this.agregarIcono(0.800, 0.350, "/iconos/sorpresa_carita.png");
+            	System.out.print("agregado");
+            }
+            break;
+        default:
+            
+    }
+    }
+    
     
     
     private void reaccionarConRotacion(float angulo){
@@ -209,22 +287,28 @@ public class ListenerTuio implements TuioListener{
                     
                     Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "alegria";
                 } else if (angulo >= 60 && angulo < 120) {
                     
                     Image img = new Image(getClass().getResource("/imagenes/seleccion_enojo.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "enojo";
                 } else if (angulo >= 120 && angulo < 180) {
                 	Image img = new Image(getClass().getResource("/imagenes/seleccion_miedo.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "miedo";
                 }  else if (angulo >= 180 && angulo < 240) {
                 	Image img = new Image(getClass().getResource("/imagenes/seleccion_triste.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "tristeza";
                 } else if (angulo >= 240 && angulo < 300) {
                 	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion5.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "asco";
                 } else if (angulo >= 300 && angulo < 360) {
                 	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion6.png").toExternalForm());
                 	this._imagen.setImage(img);
+                	this.imagenEmocionActual= "sorpresa";
                 }
     }
 
