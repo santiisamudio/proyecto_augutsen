@@ -1,7 +1,6 @@
 package proyecto_augutsen;
 
 import TUIO.*;
-import java.util.HashMap;
 import javafx.scene.layout.Pane;
 
     public class ClienteTuio {
