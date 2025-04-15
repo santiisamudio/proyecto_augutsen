@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
     public void start(){
         
     	
-        ListenerTuio listener = new ListenerTuio(_contenedor,this._main);//se crea el listener que manejara los eventos de los simbolos fiduciales y se le pasa el contenedor pane
+        ListenerTuio listener = new ListenerTuio(_contenedor);//se crea el listener que manejara los eventos de los simbolos fiduciales y se le pasa el contenedor pane
         this._cliente.addTuioListener(listener);//se agrega al cliente el tuiolistener       
         this._cliente.connect();//se conecta al servidor 
         System.out.println("conectado ");

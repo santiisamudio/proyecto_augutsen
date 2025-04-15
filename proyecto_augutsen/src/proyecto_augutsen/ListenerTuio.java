@@ -13,18 +13,19 @@ import javafx.stage.Screen;
 public class ListenerTuio implements TuioListener{
     private Pane _contenedor;//contenedor
     private int _nivel;
-    private AplicacionMain _main;
+    
     private ImagenesV imagenV;
     private PeriodicoInicial periodico;
     private Emociones _emociones;
+    private VideoMonitor _videos;
     //mica
     private Gifs gifView;
     
     
-    public ListenerTuio(Pane contenedor,AplicacionMain main) {    	
+    public ListenerTuio(Pane contenedor) {    	
     	this.periodico = new PeriodicoInicial();
     	this._nivel= 0;
-    	this._main= main;
+    	
         this._contenedor = contenedor;
         this._emociones = new Emociones();
         double ancho = Screen.getPrimary().getVisualBounds().getWidth();
@@ -36,6 +37,10 @@ public class ListenerTuio implements TuioListener{
         //mica
         this.gifView = new Gifs(this._contenedor); 
         this.gifView.AsignarGif_nivel0(); 
+        
+        this._videos = new VideoMonitor();
+        
+        
        
     }
     
@@ -78,11 +83,15 @@ public class ListenerTuio implements TuioListener{
         });
     }
     
+    private void iniciarVideo() {
+    	this._videos.iniciarVideoInterferencia();
+    	this._videos.iniciarVideoProyector();
+    }
     
     private void subirNivel() {
     	this._nivel++;
 		this.imagenV.AsignarImagenAugutsen();
-    	Platform.runLater(() ->this._main.iniciarVideo());
+    	Platform.runLater(() ->this.iniciarVideo());
 		this._contenedor.getChildren().removeIf(node -> node instanceof ImageView && !node.getId().equals("background"));//elimina las partes del rompecabezas del contenedor
 		this.imagenV.LimpiarContenedor();//limpia la imagen
 		//AGREGO MAS GIFS
