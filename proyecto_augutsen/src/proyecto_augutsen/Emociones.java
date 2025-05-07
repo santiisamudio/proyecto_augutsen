@@ -5,6 +5,7 @@ public class Emociones {
 	 private String _emocionActual;
 	 
 	 public Emociones() {
+		
 		 this._emociones = new boolean[6];
 	    	for(int i=0;i<5;i++) {
 	    		this._emociones[i]= false;
@@ -18,9 +19,11 @@ public class Emociones {
 	        case 6:
 	            if (emocion.equals("alegria")){
 	            	this._emociones[0]=true;
+	        
 	            	imagenV.CrearIcono(0.865, 0.190, "/iconos/alegria_carita.png");
-	            	
 	            	System.out.print("agregado");
+	            
+	        
 	            }
 	            break;
 	        case 7:
@@ -28,6 +31,7 @@ public class Emociones {
 	            	this._emociones[1]=true;
 	            	imagenV.CrearIcono(0.930, 0.220, "/iconos/ira_carita.png");
 	            	System.out.print("agregado");
+	           
 	            }
 	            break;
 	        case 8:
@@ -35,6 +39,7 @@ public class Emociones {
 	            	this._emociones[2]=true;
 	            	imagenV.CrearIcono(0.800, 0.220, "/iconos/miedo_carita.png");
 	            	System.out.print("agregado");
+	            
 	            }
 	            break;
 	        case 9:
@@ -42,6 +47,7 @@ public class Emociones {
 	            	this._emociones[3]=true;
 	            	imagenV.CrearIcono(0.865, 0.400, "/iconos/tristeza_carita.png");
 	            	System.out.print("agregado");
+	            	
 	            }
 	            break;
 	        case 10:
@@ -49,6 +55,7 @@ public class Emociones {
 	            	this._emociones[4]=true;
 	            	imagenV.CrearIcono(0.930, 0.350, "/iconos/asco_carita_.png");
 	            	System.out.print("agregado");
+	            	
 	            }
 	            break;
 	        case 11:
@@ -56,7 +63,8 @@ public class Emociones {
 	            	this._emociones[5]=true;
 	            	imagenV.CrearIcono(0.800, 0.350, "/iconos/sorpresa_carita.png");
 	            	System.out.print("agregado");
-	            }
+	            
+	        	}
 	            break;
 	        default:
 	            
