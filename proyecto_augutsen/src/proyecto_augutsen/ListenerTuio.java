@@ -24,7 +24,7 @@ public class ListenerTuio implements TuioListener{
     
     public ListenerTuio(Pane contenedor) {    	
     	this.periodico = new PeriodicoInicial();
-    	this._nivel= 0;
+    	this._nivel= -1;
     	
         this._contenedor = contenedor;
         this._emociones = new Emociones();
@@ -40,10 +40,12 @@ public class ListenerTuio implements TuioListener{
         
         this._videos = new VideoMonitor();
         
-        
+        Platform.runLater(() -> this.iniciarCuca());
+
+        }
        
-    }
     
+
     @Override
     public void addTuioObject(TuioObject to) {
         System.out.println("Object added: " + to.getSymbolID());
@@ -55,11 +57,12 @@ public class ListenerTuio implements TuioListener{
             double y = to.getY() * this._contenedor.getHeight();
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
-        
+        //MICA DE NUEVO
+
         	//hasta aca mica
                 if((to.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
-                	if (imageV != null) {//verifica que el objeto exista 
                 
+                	if (imageV != null) {//verifica que el objeto exista 
                 		imageV.setVisible(true);
                         imageV.setX(to.getX() * this._contenedor.getWidth());  // Posición X de la imagen
                         imageV.setY(to.getY() * this._contenedor.getHeight());  // Posición Y de la imagen
@@ -83,6 +86,7 @@ public class ListenerTuio implements TuioListener{
         });
     }
     
+  
     private void iniciarVideo() {
     	this._videos.iniciarVideoInterferencia();
     	this._videos.iniciarVideoProyector();
@@ -97,6 +101,13 @@ public class ListenerTuio implements TuioListener{
 		//AGREGO MAS GIFS
 		this.gifView.AsignarGif_nivel1();
     }
+    public void iniciarCuca() {
+    	if(this._nivel==-1) {
+    		//inicia en la tele la presentacion de la cucaracha y enla mesa interferencia
+			this._videos.iniciarPresentacionCuca();
+			this._videos.iniciarVideoInterferencia();
+			this._nivel++;
+    	}}
     
     private boolean esCuadranteCentroMapa(double x, double y) {
     	return ((x>0.1674)&&(x<0.8330)&&(y>0.1241)&&(y<0.8878));
@@ -121,7 +132,7 @@ public class ListenerTuio implements TuioListener{
                 if (obj.getSymbolID() != 3) {
                     if (this._nivel == 0) {	
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
-
+                        	
                         // Solo actualizar si hay cambios para evitar repaints innecesarios
                         if (dentroDelCuadrante) {
                             

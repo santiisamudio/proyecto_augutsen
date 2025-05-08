@@ -15,7 +15,7 @@ public class VideoMonitor {
 	private Stage _primerMonitor;
 	private Stage _segundoMonitor;
 	private MediaPlayer reproductor;
-	
+	private MediaPlayer reproductorSegundoMonitor;
 	public VideoMonitor() {
 		
 	}
@@ -60,7 +60,43 @@ public class VideoMonitor {
             }
         });
     }
+	
+	
 	//nuevo agregado mio
+	public void iniciarPresentacionCuca() {
+	Platform.runLater(() -> {
+        if (this._segundoMonitor == null) {
+            var monitores = Screen.getScreens();
+                Screen segundoMonitor = monitores.get(0);
+                Rectangle2D dimensiones = segundoMonitor.getBounds();
+
+                this._segundoMonitor = new Stage();
+                this._segundoMonitor.setTitle("Video");
+
+                String link = "/videos/02e7_Hmm.mp4";
+                URL videoURL = getClass().getResource(link);
+                Media media = new Media(videoURL.toExternalForm());
+                reproductor = new MediaPlayer(media);
+                MediaView mediaView = new MediaView(reproductor);
+
+                StackPane videoRoot = new StackPane(mediaView);
+                Scene videoScene = new Scene(videoRoot);
+                this._segundoMonitor.setScene(videoScene);
+
+                this._segundoMonitor.setX(dimensiones.getMinX());
+                this._segundoMonitor.setY(dimensiones.getMinY());
+                this._segundoMonitor.setWidth(dimensiones.getWidth());
+                this._segundoMonitor.setHeight(dimensiones.getHeight());
+
+                reproductor.setAutoPlay(true);
+                this._segundoMonitor.show();
+                
+            
+        } else {
+        	reproductor.play(); 
+        }
+    }); }
+
 	public void  iniciarSorpresa() {
     	Platform.runLater(() -> {
     		if (this._primerMonitor == null) {
@@ -322,7 +358,56 @@ public class VideoMonitor {
         });
     }
 
-	
+	//probandoooo
+	 private void iniciarv(String rutaVideo, boolean esSegundoMonitor) {
+	        Platform.runLater(() -> {
+	            var monitores = Screen.getScreens();
+	            if (monitores.size() > 1 || !esSegundoMonitor) {
+	                Screen monitor = esSegundoMonitor ? monitores.get(1) : monitores.get(0);
+	                Rectangle2D dimensiones = monitor.getBounds();
+
+	                Stage monitorActual = esSegundoMonitor ? this._segundoMonitor : this._primerMonitor;
+	                if (monitorActual == null) {
+	                    monitorActual = new Stage();
+	                    monitorActual.setTitle("Video");
+
+	                    URL videoURL = getClass().getResource(rutaVideo);
+	                    if (videoURL == null) {
+	                        System.out.println("Error: Video no encontrado");
+	                        return;
+	                    }
+
+	                    Media media = new Media(videoURL.toExternalForm());
+	                    reproductor = new MediaPlayer(media);
+	                    MediaView mediaView = new MediaView(reproductor);
+
+	                    StackPane videoRoot = new StackPane(mediaView);
+	                    Scene videoScene = new Scene(videoRoot);
+	                    monitorActual.setScene(videoScene);
+
+	                    monitorActual.setX(dimensiones.getMinX());
+	                    monitorActual.setY(dimensiones.getMinY());
+	                    monitorActual.setWidth(dimensiones.getWidth());
+	                    monitorActual.setHeight(dimensiones.getHeight());
+
+	                    reproductor.setAutoPlay(true);
+	                    monitorActual.show();
+
+	                 
+
+	                    if (esSegundoMonitor) {
+	                        this._segundoMonitor = monitorActual;
+	                    } else {
+	                        this._primerMonitor = monitorActual;
+	                    }
+	                } else {
+	                    reproductor.play(); 
+	                }
+	            } else {
+	                System.out.println("Solo hay un monitor disponible");
+	            }
+	        });
+	    }
 	public void iniciarVideoInterferencia() {
     	Platform.runLater(() -> {
             if (this._primerMonitor == null) {
@@ -337,8 +422,8 @@ public class VideoMonitor {
                     String link = "/videos/video interferencia.mp4";
                     URL videoURL = getClass().getResource(link);
                     Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
+                    reproductorSegundoMonitor = new MediaPlayer(media);
+                    MediaView mediaView = new MediaView( reproductorSegundoMonitor);
 
                     StackPane videoRoot = new StackPane(mediaView);
                     Scene videoScene = new Scene(videoRoot);
@@ -349,10 +434,10 @@ public class VideoMonitor {
                     this._primerMonitor.setWidth(dimensiones.getWidth());
                     this._primerMonitor.setHeight(dimensiones.getHeight());
 
-                    reproductor.setAutoPlay(true);
+                    reproductorSegundoMonitor.setAutoPlay(true);
                     this._primerMonitor.show();
                     
-                    reproductor.setOnEndOfMedia(() -> {
+                    reproductorSegundoMonitor.setOnEndOfMedia(() -> {
                         this._primerMonitor.close();
                         System.out.println("Video finalizado. Ventana cerrada.");
                         
