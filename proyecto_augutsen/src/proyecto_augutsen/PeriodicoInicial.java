@@ -18,7 +18,17 @@ public class PeriodicoInicial {
 	 public boolean estaCompleto() {
 	    	return(this.partes[0] && this.partes[1] && this.partes[2] && this.partes[3]);
 	 }
-	   
+	 
+	 
+	 public boolean estaVacio() {
+		    return (!partes[0] && !partes[1] && !partes[2] && !partes[3]);
+		}
+
+	 
+	 public boolean semicompleto() {
+		    return (partes[0] && partes[1] && !partes[2] && !partes[3]);
+		}
+
 	 public void seEncuentraParte1() {
 		 partes[0] = true;
 	 }

@@ -73,6 +73,8 @@ public class Emociones {
 	    	
 	    }
 	 
+	 
+	 
 	 public String getEmocionActual() {
 		 return this._emocionActual;
 	 }

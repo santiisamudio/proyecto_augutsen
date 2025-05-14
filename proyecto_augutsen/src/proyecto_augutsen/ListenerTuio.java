@@ -21,7 +21,7 @@ public class ListenerTuio implements TuioListener{
     //mica
     private Gifs gifView;
     
-    
+    private boolean[] _emocion;// 
     public ListenerTuio(Pane contenedor) {    	
     	this.periodico = new PeriodicoInicial();
     	this._nivel= -1;
@@ -41,11 +41,28 @@ public class ListenerTuio implements TuioListener{
         this._videos = new VideoMonitor();
         
         Platform.runLater(() -> this.iniciarCuca());
-
+        this._emocion = new boolean[6];
+        for(int i=0;i<5;i++) {
+    		this._emocion[i]= false;
+    	}
+       
         }
        
     
-
+  /*  private void agregarIcono(double x, double y,String link) {
+    	Image img = new Image(getClass().getResource(link).toExternalForm());
+        ImageView imageV = new ImageView(img); 
+        imageV.setId("icono");
+        imageV.setX(x * this._contenedor.getWidth());  // Posición X de la imagen
+        imageV.setY(y * this._contenedor.getHeight());  // Posición Y de la imagen
+        imageV.setVisible(true);
+        imageV.setFitWidth(60);  // Ajusta el tamaño de la imagen
+        imageV.setFitHeight(60);  // Ajusta el tamaño de la imagen
+        imageV.setPreserveRatio(true);  // Mantiene la relación de aspecto
+        
+        this._contenedor.getChildren().add(imageV);  // Agregamos la imagen al contenedor
+    } */
+    
     @Override
     public void addTuioObject(TuioObject to) {
         System.out.println("Object added: " + to.getSymbolID());
@@ -58,7 +75,7 @@ public class ListenerTuio implements TuioListener{
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
         //MICA DE NUEVO
-
+        	
         	//hasta aca mica
                 if((to.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
                 
@@ -66,10 +83,18 @@ public class ListenerTuio implements TuioListener{
                 		imageV.setVisible(true);
                         imageV.setX(to.getX() * this._contenedor.getWidth());  // Posición X de la imagen
                         imageV.setY(to.getY() * this._contenedor.getHeight());  // Posición Y de la imagen
-                        this.periodico.agregarMapa(to.getSymbolID(),to.getX(),to.getY(),to.getAngleDegrees());                        
-                        if (this.periodico.estaCompleto() ) 
-                        	this.subirNivel();                        
+                        this.periodico.agregarMapa(to.getSymbolID(),to.getX(),to.getY(),to.getAngleDegrees());    
+                        //a
+                       
+                        if (this.periodico.estaCompleto()) {
+                            this.gifView.Gif_SacaPiezas(); 
+                        
+                        	this._videos.carpicnho();
+                        	
+                        	this.subirNivel();          
+                        } 
                 	}
+                	
                    
                 }else if((to.getSymbolID()==3)&&(this._nivel==1)&&(esCuadranteInferiorIzquierdo(to.getX(),to.getY()))){
                 	
@@ -79,12 +104,14 @@ public class ListenerTuio implements TuioListener{
                 		imageV.setX(to.getX() * this._contenedor.getWidth());//se actualiza x
                 		imageV.setY(to.getY() * this._contenedor.getHeight());//se actualiza y
                 		
-                		this.imagenV.AsignarImagenRotacion(to.getAngleDegrees());
+                	// QUEDAMOS EN SACARLO PORQUE AHORA REMPLAZAMOS LAS IMAGENES CON LOS VIDEOS
+                	this.imagenV.AsignarImagenRotacion(to.getAngleDegrees());
                 	}
                 
                 }      
         });
-    }
+        
+        }
     
   
     private void iniciarVideo() {
@@ -100,13 +127,15 @@ public class ListenerTuio implements TuioListener{
 		this.imagenV.LimpiarContenedor();//limpia la imagen
 		//AGREGO MAS GIFS
 		this.gifView.AsignarGif_nivel1();
+	
     }
     public void iniciarCuca() {
     	if(this._nivel==-1) {
     		//inicia en la tele la presentacion de la cucaracha y enla mesa interferencia
-			this._videos.iniciarPresentacionCuca();
+			this._videos.iniciarVideoProyector();
 			this._videos.iniciarVideoInterferencia();
 			this._nivel++;
+			 
     	}}
     
     private boolean esCuadranteCentroMapa(double x, double y) {
@@ -119,7 +148,8 @@ public class ListenerTuio implements TuioListener{
   
 
     @Override   
-   
+ 
+    
     public void updateTuioObject(TuioObject obj) { 
         double x = obj.getX();
         double y = obj.getY();
@@ -140,11 +170,16 @@ public class ListenerTuio implements TuioListener{
                             
                             imageV.setX(x * this._contenedor.getWidth());
                             imageV.setY(y * this._contenedor.getHeight());
-
-                            this.periodico.agregarMapa(obj.getSymbolID(), x, y, obj.getAngleDegrees());
-                            if (this.periodico.estaCompleto() ) 
-                            	this.subirNivel();
                             
+                            this.periodico.agregarMapa(obj.getSymbolID(), x, y, obj.getAngleDegrees());
+                           
+                            if (this.periodico.estaCompleto()) {
+                                this.gifView.Gif_SacaPiezas();
+                            	this._videos.carpicnho();
+                            	
+                            this.subirNivel();          
+                            } 
+                    	
                         } else {
                             imageV.setVisible(false);
                             this.periodico.eliminarMapa(obj.getSymbolID());
@@ -169,7 +204,7 @@ public class ListenerTuio implements TuioListener{
                             // Evitar actualizaciones constantes de rotación si el cambio es mínimo
                             double anguloActual = imageV.getRotate();
                             if (Math.abs(anguloActual - angle) > 1) { 
-                               // imageV.setRotate(angle);
+                                imageV.setRotate(angle);
                             	//eliminar gifs del nivel 1
                 				this.gifView.EliminarGifs_nivel1();	
                                 this.imagenV.AsignarImagenRotacion(obj.getAngleDegrees());
@@ -191,29 +226,30 @@ public class ListenerTuio implements TuioListener{
     
 
 
+    
     @Override
-    public void removeTuioObject(TuioObject obj) {// un objeto se elimina automaticamente cuando desaparece del campo visual
-       
+    public void removeTuioObject(TuioObject obj) {
         long idSesion= obj.getSessionID();
-         Platform.runLater(() -> {
+        Platform.runLater(() -> {
             if(obj.getSymbolID()!=3){
-            	
-            	ImageView imageV = this.imagenV.EliminarImagen(idSesion);
+                ImageView imageV = this.imagenV.EliminarImagen(idSesion);
                 if (imageV != null) {               	
-                    this._contenedor.getChildren().remove(imageV);//elimina al circulo del contenedor pane                    
+                    this._contenedor.getChildren().remove(imageV);                
                     this.periodico.eliminarMapa(obj.getSymbolID());               
                 }
-            }else{
-            	ImageView imageV = this.imagenV.EliminarImagen(idSesion);
+            } else {
+                ImageView imageV = this.imagenV.EliminarImagen(idSesion);
                 if (imageV != null) {
-                    this._contenedor.getChildren().remove(imageV);//elimina al circulo del contenedor pane
+                    this._contenedor.getChildren().remove(imageV);
                 }
-            }   
-        }
-         )
-;
-    
-}
+            }
+
+          //  if (this.periodico.estaVacio()) {
+           //     System.out.println("Se vació el periódico, reproduciendo video");
+          //      this._videos.iniciarVideoInterferencia();
+         //   }
+        });
+    }
 
     @Override
     public void addTuioCursor(TuioCursor tc) {

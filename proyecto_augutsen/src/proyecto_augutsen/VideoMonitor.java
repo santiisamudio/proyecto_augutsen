@@ -34,7 +34,7 @@ public class VideoMonitor {
                     this._segundoMonitor = new Stage();
                     this._segundoMonitor.setTitle("Video");
 
-                    String link = "/videos/lirili.mp4";
+                    String link = "/videos/01_cucarachonCuentaSuPlanMalvado.mp4";
                     URL videoURL = getClass().getResource(link);
                     Media media = new Media(videoURL.toExternalForm());
                     reproductor = new MediaPlayer(media);
@@ -63,46 +63,26 @@ public class VideoMonitor {
 	
 	
 	//nuevo agregado mio
-	public void iniciarPresentacionCuca() {
-	Platform.runLater(() -> {
-        if (this._segundoMonitor == null) {
-            var monitores = Screen.getScreens();
-                Screen segundoMonitor = monitores.get(0);
-                Rectangle2D dimensiones = segundoMonitor.getBounds();
 
-                this._segundoMonitor = new Stage();
-                this._segundoMonitor.setTitle("Video");
-
-                String link = "/videos/02e7_Hmm.mp4";
-                URL videoURL = getClass().getResource(link);
-                Media media = new Media(videoURL.toExternalForm());
-                reproductor = new MediaPlayer(media);
-                MediaView mediaView = new MediaView(reproductor);
-
-                StackPane videoRoot = new StackPane(mediaView);
-                Scene videoScene = new Scene(videoRoot);
-                this._segundoMonitor.setScene(videoScene);
-
-                this._segundoMonitor.setX(dimensiones.getMinX());
-                this._segundoMonitor.setY(dimensiones.getMinY());
-                this._segundoMonitor.setWidth(dimensiones.getWidth());
-                this._segundoMonitor.setHeight(dimensiones.getHeight());
-
-                reproductor.setAutoPlay(true);
-                this._segundoMonitor.show();
-                
-            
-        } else {
-        	reproductor.play(); 
-        }
-    }); }
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void  iniciarSorpresa() {
     	Platform.runLater(() -> {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -145,7 +125,7 @@ public class VideoMonitor {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -189,7 +169,7 @@ public class VideoMonitor {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -232,7 +212,7 @@ public class VideoMonitor {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -276,7 +256,7 @@ public class VideoMonitor {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -319,7 +299,7 @@ public class VideoMonitor {
     		if (this._primerMonitor == null) {
                 var monitores = Screen.getScreens();
                 if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
+                    Screen segundoMonitor = monitores.get(1);
                     Rectangle2D dimensiones = segundoMonitor.getBounds();
 
                     this._primerMonitor = new Stage();
@@ -408,47 +388,91 @@ public class VideoMonitor {
 	            }
 	        });
 	    }
-	public void iniciarVideoInterferencia() {
-    	Platform.runLater(() -> {
-            if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(0);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
+	 
+	 public void iniciarVideoInterferencia() {
+		    Platform.runLater(() -> {
+		        if (this._primerMonitor == null) {
+		            Screen pantallaNotebook = Screen.getPrimary(); // Monitor principal = notebook
+		            Rectangle2D dimensiones = pantallaNotebook.getBounds();
 
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
+		            this._primerMonitor = new Stage();
+		            this._primerMonitor.setTitle("Video Interferencia");
 
-                    String link = "/videos/video interferencia.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductorSegundoMonitor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView( reproductorSegundoMonitor);
+		            String link = "/videos/video interferencia.mp4";
+		            URL videoURL = getClass().getResource(link);
+		            if (videoURL == null) {
+		                System.out.println("No se encontró el archivo de video: " + link);
+		                return;
+		            }
 
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
+		            Media media = new Media(videoURL.toExternalForm());
+		            reproductorSegundoMonitor = new MediaPlayer(media);
+		            MediaView mediaView = new MediaView(reproductorSegundoMonitor);
 
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
+		            StackPane videoRoot = new StackPane(mediaView);
+		            Scene videoScene = new Scene(videoRoot);
+		            this._primerMonitor.setScene(videoScene);
 
-                    reproductorSegundoMonitor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductorSegundoMonitor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
+		            this._primerMonitor.setX(dimensiones.getMinX());
+		            this._primerMonitor.setY(dimensiones.getMinY());
+		            this._primerMonitor.setWidth(dimensiones.getWidth());
+		            this._primerMonitor.setHeight(dimensiones.getHeight());
+
+		            reproductorSegundoMonitor.setAutoPlay(true);
+		            this._primerMonitor.show();
+
+		            reproductorSegundoMonitor.setOnEndOfMedia(() -> {
+		                this._primerMonitor.close();
+		                System.out.println("Video finalizado. Ventana cerrada.");
+		            });
+
+		        } else {
+		            reproductorSegundoMonitor.play(); 
+		        }
+		    });
+		}
+
+
+public void carpicnho() {
+    Platform.runLater(() -> {
+        if (this._primerMonitor == null) {
+            Screen pantallaNotebook = Screen.getPrimary(); // Monitor principal = notebook
+            Rectangle2D dimensiones = pantallaNotebook.getBounds();
+
+            this._primerMonitor = new Stage();
+            this._primerMonitor.setTitle("Video carpincho");
+            String link = "/videos/video interferencia.mp4";
+           // String link = "/videos/carpinchoFinal.mp4";
+            URL videoURL = getClass().getResource(link);
+            if (videoURL == null) {
+                System.out.println("No se encontró el archivo de video: " + link);
+                return;
             }
-        });
-    }
+
+            Media media = new Media(videoURL.toExternalForm());
+            reproductorSegundoMonitor = new MediaPlayer(media);
+            MediaView mediaView = new MediaView(reproductorSegundoMonitor);
+
+            StackPane videoRoot = new StackPane(mediaView);
+            Scene videoScene = new Scene(videoRoot);
+            this._primerMonitor.setScene(videoScene);
+
+            this._primerMonitor.setX(dimensiones.getMinX());
+            this._primerMonitor.setY(dimensiones.getMinY());
+            this._primerMonitor.setWidth(dimensiones.getWidth());
+            this._primerMonitor.setHeight(dimensiones.getHeight());
+
+            reproductorSegundoMonitor.setAutoPlay(true);
+            this._primerMonitor.show();
+
+            reproductorSegundoMonitor.setOnEndOfMedia(() -> {
+                this._primerMonitor.close();
+                System.out.println("Video finalizado. Ventana cerrada.");
+            });
+
+        } else {
+            reproductorSegundoMonitor.play(); 
+        }
+    });
+}
 }

@@ -111,6 +111,23 @@ public class Gifs {
 		        gif_5.setLayoutX(1590);
 		        gif_5.setLayoutY(730);
 		    }
+		    
+		    
+    }
+    
+    
+    public void Gif_SacaPiezas() {
+    	double gifX_11 = 0.25 * this._contenedor.getWidth();
+		  double gifY_11= 0.75 * this._contenedor.getHeight();
+		  this.gifView.CrearGif(555, gifX_11, gifY_11, 555, "/gifs/saca_las_piezas.gif");
+		  ImageView gif_11 = this.gifView.getGif(555);
+		  gif_11.setScaleX(1.3);
+		    if (gif_11 != null) {
+		        gif_11.setVisible(true);
+		        gif_11.setLayoutX(600);
+		        gif_11.setLayoutY(100);
+		    }
+
     }
     public void EliminarGifs_nivel1() {
     	ImageView gif_5 = this.gifView.getGif(1111);
