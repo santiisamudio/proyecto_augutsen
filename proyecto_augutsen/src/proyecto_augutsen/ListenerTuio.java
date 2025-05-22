@@ -20,11 +20,12 @@ public class ListenerTuio implements TuioListener{
     private VideoMonitor _videos;
     //mica
     private Gifs gifView;
-    
+    private boolean esperandoVaciarPeriodico;
+
     private boolean[] _emocion;// 
     public ListenerTuio(Pane contenedor) {    	
     	this.periodico = new PeriodicoInicial();
-    	this._nivel= -1;
+    	this._nivel= 0;
     	
         this._contenedor = contenedor;
         this._emociones = new Emociones();
@@ -39,8 +40,9 @@ public class ListenerTuio implements TuioListener{
         this.gifView.AsignarGif_nivel0(); 
         
         this._videos = new VideoMonitor();
-        
-        Platform.runLater(() -> this.iniciarCuca());
+        this.esperandoVaciarPeriodico = false;
+
+    //    Platform.runLater(() -> this.iniciarCuca());
         this._emocion = new boolean[6];
         for(int i=0;i<5;i++) {
     		this._emocion[i]= false;
@@ -74,9 +76,7 @@ public class ListenerTuio implements TuioListener{
             double y = to.getY() * this._contenedor.getHeight();
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
-        //MICA DE NUEVO
-        	
-        	//hasta aca mica
+        
                 if((to.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
                 
                 	if (imageV != null) {//verifica que el objeto exista 
@@ -85,16 +85,28 @@ public class ListenerTuio implements TuioListener{
                         imageV.setY(to.getY() * this._contenedor.getHeight());  // Posición Y de la imagen
                         this.periodico.agregarMapa(to.getSymbolID(),to.getX(),to.getY(),to.getAngleDegrees());    
                         //a
-                       
-                        if (this.periodico.estaCompleto()) {
+                        System.out.println(periodico.toString());
+                    
+                        if (this.periodico.estaCompleto() && !esperandoVaciarPeriodico) {
                             this.gifView.Gif_SacaPiezas(); 
-                        
-                        	this._videos.carpicnho();
+                            this._videos.iniciarSecuenciaVideos();
+                            esperandoVaciarPeriodico = true;
+                        }
+
+                        // Esto se verifica siempre que ya estuvo completo antes
+                        if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
+                            this.subirNivel();
+                            esperandoVaciarPeriodico = false;
+                        }
+
+              
                         	
-                        	this.subirNivel();          
-                        } 
-                	}
+                        	
+                        	
+                    
                 	
+                        
+                }  	
                    
                 }else if((to.getSymbolID()==3)&&(this._nivel==1)&&(esCuadranteInferiorIzquierdo(to.getX(),to.getY()))){
                 	
@@ -111,32 +123,31 @@ public class ListenerTuio implements TuioListener{
                 }      
         });
         
-        }
+}
     
   
-    private void iniciarVideo() {
-    	this._videos.iniciarVideoInterferencia();
-    	this._videos.iniciarVideoProyector();
-    }
     
     private void subirNivel() {
     	this._nivel++;
 		this.imagenV.AsignarImagenAugutsen();
-    	Platform.runLater(() ->this.iniciarVideo());
+    //	Platform.runLater(() ->this.iniciarVideo());
 		this._contenedor.getChildren().removeIf(node -> node instanceof ImageView && !node.getId().equals("background"));//elimina las partes del rompecabezas del contenedor
 		this.imagenV.LimpiarContenedor();//limpia la imagen
 		//AGREGO MAS GIFS
 		this.gifView.AsignarGif_nivel1();
 	
+    
     }
-    public void iniciarCuca() {
+    
+    
+    /*public void iniciarCuca() {
     	if(this._nivel==-1) {
     		//inicia en la tele la presentacion de la cucaracha y enla mesa interferencia
 			this._videos.iniciarVideoProyector();
 			this._videos.iniciarVideoInterferencia();
 			this._nivel++;
 			 
-    	}}
+    	}} */
     
     private boolean esCuadranteCentroMapa(double x, double y) {
     	return ((x>0.1674)&&(x<0.8330)&&(y>0.1241)&&(y<0.8878));
@@ -172,13 +183,6 @@ public class ListenerTuio implements TuioListener{
                             imageV.setY(y * this._contenedor.getHeight());
                             
                             this.periodico.agregarMapa(obj.getSymbolID(), x, y, obj.getAngleDegrees());
-                           
-                            if (this.periodico.estaCompleto()) {
-                                this.gifView.Gif_SacaPiezas();
-                            	this._videos.carpicnho();
-                            	
-                            this.subirNivel();          
-                            } 
                     	
                         } else {
                             imageV.setVisible(false);
@@ -235,7 +239,13 @@ public class ListenerTuio implements TuioListener{
                 ImageView imageV = this.imagenV.EliminarImagen(idSesion);
                 if (imageV != null) {               	
                     this._contenedor.getChildren().remove(imageV);                
-                    this.periodico.eliminarMapa(obj.getSymbolID());               
+                    this.periodico.eliminarMapa(obj.getSymbolID());  
+                 // Verificar si ahora el periódico está vacío y estamos esperando vaciado
+                    if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
+                        this.subirNivel();
+                        esperandoVaciarPeriodico = false;
+                    }
+
                 }
             } else {
                 ImageView imageV = this.imagenV.EliminarImagen(idSesion);

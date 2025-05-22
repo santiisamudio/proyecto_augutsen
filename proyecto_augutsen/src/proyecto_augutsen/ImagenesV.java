@@ -91,33 +91,33 @@ public class ImagenesV {
             this._videos.iniciarAlegria();
           //  Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
             //this._imagenPrincipal.setImage(img);
-        //	this.imagenEmocionActual=  "alegria";
+        	this.imagenEmocionActual=  "alegria";
         } else if (angulo >= 60 && angulo < 120) {
             this._videos.iniciarIra();
             
        //    Image img = new Image(getClass().getResource("/imagenes/seleccion_enojo.png").toExternalForm());
         //this._imagenPrincipal.setImage(img);
-        	//this.imagenEmocionActual= "enojo";
+         this.imagenEmocionActual= "enojo";
         } else if (angulo >= 120 && angulo < 180) {
             this._videos.iniciarMiedo();
         	//Image img = new Image(getClass().getResource("/imagenes/seleccion_miedo.png").toExternalForm());
         	//this._imagenPrincipal.setImage(img);
-        //	this.imagenEmocionActual= "miedo";
+        	this.imagenEmocionActual= "miedo";
         }  else if (angulo >= 180 && angulo < 240) {
             this._videos.iniciarTristeza();
         //	Image img = new Image(getClass().getResource("/imagenes/seleccion_triste.png").toExternalForm());
         //	this._imagenPrincipal.setImage(img);
-        //	this.imagenEmocionActual= "tristeza";
+       	this.imagenEmocionActual= "tristeza";
         } else if (angulo >= 240 && angulo < 300) {
             this._videos.iniciarDesagrado();
         //	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion5.png").toExternalForm());
         	//this._imagenPrincipal.setImage(img);
-            //this.imagenEmocionActual= "asco";
+           this.imagenEmocionActual= "asco";
         } else if (angulo >= 300 && angulo < 360) {
             this._videos.iniciarSorpresa ();
      //   	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion6.png").toExternalForm());
        // 	this._imagenPrincipal.setImage(img);
-       //	this.imagenEmocionActual= "sorpresa";
+        this.imagenEmocionActual= "sorpresa";
         }
     	
     }

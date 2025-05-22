@@ -339,7 +339,7 @@ public class VideoMonitor {
     }
 
 	//probandoooo
-	 private void iniciarv(String rutaVideo, boolean esSegundoMonitor) {
+	/* private void iniciarv(String rutaVideo, boolean esSegundoMonitor) {
 	        Platform.runLater(() -> {
 	            var monitores = Screen.getScreens();
 	            if (monitores.size() > 1 || !esSegundoMonitor) {
@@ -388,91 +388,171 @@ public class VideoMonitor {
 	            }
 	        });
 	    }
-	 
+	 */
 	 public void iniciarVideoInterferencia() {
-		    Platform.runLater(() -> {
-		        if (this._primerMonitor == null) {
-		            Screen pantallaNotebook = Screen.getPrimary(); // Monitor principal = notebook
-		            Rectangle2D dimensiones = pantallaNotebook.getBounds();
+		 
+			Platform.runLater(() -> {
+	    		if (this._primerMonitor == null) {
+	                var monitores = Screen.getScreens();
+	                if (monitores.size() > 1) {
+	                    Screen segundoMonitor = monitores.get(2);
+	                    Rectangle2D dimensiones = segundoMonitor.getBounds();
 
-		            this._primerMonitor = new Stage();
-		            this._primerMonitor.setTitle("Video Interferencia");
+	                    this._primerMonitor = new Stage();
+	                    this._primerMonitor.setTitle("Video");
 
-		            String link = "/videos/video interferencia.mp4";
-		            URL videoURL = getClass().getResource(link);
-		            if (videoURL == null) {
-		                System.out.println("No se encontró el archivo de video: " + link);
-		                return;
-		            }
+	                    String link = "/videos/video interferencia.mp4";
+	                    URL videoURL = getClass().getResource(link);
+	                    Media media = new Media(videoURL.toExternalForm());
+	                    reproductor = new MediaPlayer(media);
+	                    MediaView mediaView = new MediaView(reproductor);
 
-		            Media media = new Media(videoURL.toExternalForm());
-		            reproductorSegundoMonitor = new MediaPlayer(media);
-		            MediaView mediaView = new MediaView(reproductorSegundoMonitor);
+	                    StackPane videoRoot = new StackPane(mediaView);
+	                    Scene videoScene = new Scene(videoRoot);
+	                    this._primerMonitor.setScene(videoScene);
 
-		            StackPane videoRoot = new StackPane(mediaView);
-		            Scene videoScene = new Scene(videoRoot);
-		            this._primerMonitor.setScene(videoScene);
+	                    this._primerMonitor.setX(dimensiones.getMinX());
+	                    this._primerMonitor.setY(dimensiones.getMinY());
+	                    this._primerMonitor.setWidth(dimensiones.getWidth());
+	                    this._primerMonitor.setHeight(dimensiones.getHeight());
 
-		            this._primerMonitor.setX(dimensiones.getMinX());
-		            this._primerMonitor.setY(dimensiones.getMinY());
-		            this._primerMonitor.setWidth(dimensiones.getWidth());
-		            this._primerMonitor.setHeight(dimensiones.getHeight());
+	                    reproductor.setAutoPlay(true);
+	                    this._primerMonitor.show();
+	                    
+	                    reproductor.setOnEndOfMedia(() -> {
+	                        this._primerMonitor.close();
+	                        System.out.println("Video finalizado. Ventana cerrada.");
+	                        
+	                    });
+	                } else {
+	                    System.out.println("Solo hay un monitor disponible");
+	                    
+	                }
+	            } else {
+	            	reproductor.play(); 
+	            }
+	        });
+	    }
 
-		            reproductorSegundoMonitor.setAutoPlay(true);
-		            this._primerMonitor.show();
-
-		            reproductorSegundoMonitor.setOnEndOfMedia(() -> {
-		                this._primerMonitor.close();
-		                System.out.println("Video finalizado. Ventana cerrada.");
-		            });
-
-		        } else {
-		            reproductorSegundoMonitor.play(); 
-		        }
-		    });
-		}
 
 
-public void carpicnho() {
+		public void carpincho() {
+	    	Platform.runLater(() -> {
+	    		if (this._primerMonitor == null) {
+	                var monitores = Screen.getScreens();
+	                if (monitores.size() > 1) {
+	                    Screen segundoMonitor = monitores.get(2);
+	                    Rectangle2D dimensiones = segundoMonitor.getBounds();
+
+	                    this._primerMonitor = new Stage();
+	                    this._primerMonitor.setTitle("Video");
+
+	                    String link = "/videos/carpinchoFInal.mp4";
+	                    URL videoURL = getClass().getResource(link);
+	                    Media media = new Media(videoURL.toExternalForm());
+	                    reproductor = new MediaPlayer(media);
+	                    MediaView mediaView = new MediaView(reproductor);
+
+	                    StackPane videoRoot = new StackPane(mediaView);
+	                    Scene videoScene = new Scene(videoRoot);
+	                    this._primerMonitor.setScene(videoScene);
+
+	                    this._primerMonitor.setX(dimensiones.getMinX());
+	                    this._primerMonitor.setY(dimensiones.getMinY());
+	                    this._primerMonitor.setWidth(dimensiones.getWidth());
+	                    this._primerMonitor.setHeight(dimensiones.getHeight());
+
+	                    reproductor.setAutoPlay(true);
+	                    this._primerMonitor.show();
+	                    
+	                    reproductor.setOnEndOfMedia(() -> {
+	                        this._primerMonitor.close();
+	                        System.out.println("Video finalizado. Ventana cerrada.");
+	                        
+	                    });
+	                } else {
+	                    System.out.println("Solo hay un monitor disponible");
+	                    
+	                }
+	            } else {
+	            	reproductor.play(); 
+	            }
+	        });
+	    }
+
+public void iniciarSecuenciaVideos() {
     Platform.runLater(() -> {
-        if (this._primerMonitor == null) {
-            Screen pantallaNotebook = Screen.getPrimary(); // Monitor principal = notebook
-            Rectangle2D dimensiones = pantallaNotebook.getBounds();
-
-            this._primerMonitor = new Stage();
-            this._primerMonitor.setTitle("Video carpincho");
-            String link = "/videos/video interferencia.mp4";
-           // String link = "/videos/carpinchoFinal.mp4";
-            URL videoURL = getClass().getResource(link);
-            if (videoURL == null) {
-                System.out.println("No se encontró el archivo de video: " + link);
-                return;
-            }
-
-            Media media = new Media(videoURL.toExternalForm());
-            reproductorSegundoMonitor = new MediaPlayer(media);
-            MediaView mediaView = new MediaView(reproductorSegundoMonitor);
-
-            StackPane videoRoot = new StackPane(mediaView);
-            Scene videoScene = new Scene(videoRoot);
-            this._primerMonitor.setScene(videoScene);
-
-            this._primerMonitor.setX(dimensiones.getMinX());
-            this._primerMonitor.setY(dimensiones.getMinY());
-            this._primerMonitor.setWidth(dimensiones.getWidth());
-            this._primerMonitor.setHeight(dimensiones.getHeight());
-
-            reproductorSegundoMonitor.setAutoPlay(true);
-            this._primerMonitor.show();
-
-            reproductorSegundoMonitor.setOnEndOfMedia(() -> {
-                this._primerMonitor.close();
-                System.out.println("Video finalizado. Ventana cerrada.");
-            });
-
-        } else {
-            reproductorSegundoMonitor.play(); 
+        var monitores = Screen.getScreens();
+        if (monitores.size() < 3) {
+            System.out.println("Se necesitan al menos 3 monitores");
+            return;
         }
+
+        Screen segundoMonitor = monitores.get(1); // cucarachon
+        Screen tercerMonitor = monitores.get(2);  // interferencia + carpincho
+
+        // --------- Video 1: Cucarachón ----------
+        URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
+        MediaPlayer player1 = new MediaPlayer(new Media(url1.toExternalForm()));
+        MediaView view1 = new MediaView(player1);
+
+        Stage stage1 = new Stage();
+        stage1.setTitle("Cucarachón");
+        stage1.setScene(new Scene(new StackPane(view1)));
+        Rectangle2D dim1 = segundoMonitor.getBounds();
+        stage1.setX(dim1.getMinX());
+        stage1.setY(dim1.getMinY());
+        stage1.setWidth(dim1.getWidth());
+        stage1.setHeight(dim1.getHeight());
+        stage1.show();
+
+        // --------- Video 2: Interferencia ----------
+        URL url2 = getClass().getResource("/videos/video interferencia.mp4");
+        MediaPlayer player2 = new MediaPlayer(new Media(url2.toExternalForm()));
+        MediaView view2 = new MediaView(player2);
+
+        Stage stage2 = new Stage();
+        stage2.setTitle("Interferencia");
+        stage2.setScene(new Scene(new StackPane(view2)));
+        Rectangle2D dim2 = tercerMonitor.getBounds();
+        stage2.setX(dim2.getMinX());
+        stage2.setY(dim2.getMinY());
+        stage2.setWidth(dim2.getWidth());
+        stage2.setHeight(dim2.getHeight());
+
+        // --------- Video 3: Carpincho ----------
+        URL url3 = getClass().getResource("/videos/carpinchoFInal.mp4");
+        MediaPlayer player3 = new MediaPlayer(new Media(url3.toExternalForm()));
+        MediaView view3 = new MediaView(player3);
+
+        Stage stage3 = new Stage();
+        stage3.setTitle("Carpincho");
+        stage3.setScene(new Scene(new StackPane(view3)));
+        stage3.setX(dim2.getMinX());  // mismo que el de interferencia
+        stage3.setY(dim2.getMinY());
+        stage3.setWidth(dim2.getWidth());
+        stage3.setHeight(dim2.getHeight());
+
+        // ENCADENAR VIDEOS
+        player1.setOnEndOfMedia(() -> {
+            stage1.close();
+            stage2.show();
+            player2.play();
+        });
+
+        player2.setOnEndOfMedia(() -> {
+            stage2.close();
+            stage3.show();
+            player3.play();
+        });
+
+        player3.setOnEndOfMedia(() -> {
+            stage3.close();
+            System.out.println("Secuencia finalizada.");
+        });
+
+        // Comenzar la secuencia
+        player1.play();
     });
 }
 }

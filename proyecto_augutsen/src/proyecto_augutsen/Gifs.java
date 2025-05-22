@@ -129,6 +129,13 @@ public class Gifs {
 		    }
 
     }
+    public void eliminar_sacarPiezas() {
+    	ImageView gif_11 = this.gifView.getGif(555);
+    	if (gif_11 != null) {
+    	    this._contenedor.getChildren().remove(gif_11);
+    	}
+    }
+    	
     public void EliminarGifs_nivel1() {
     	ImageView gif_5 = this.gifView.getGif(1111);
     	if (gif_5 != null) {
