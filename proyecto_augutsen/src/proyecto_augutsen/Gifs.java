@@ -117,10 +117,13 @@ public class Gifs {
     
     
     public void Gif_SacaPiezas() {
-    	double gifX_11 = 0.25 * this._contenedor.getWidth();
-		  double gifY_11= 0.75 * this._contenedor.getHeight();
+    	double gifX_11 = 0.5 * this._contenedor.getWidth();
+		  double gifY_11= 0.5 * this._contenedor.getHeight();
 		  this.gifView.CrearGif(555, gifX_11, gifY_11, 555, "/gifs/saca_las_piezas.gif");
+		  
 		  ImageView gif_11 = this.gifView.getGif(555);
+		  gif_11.setFitHeight(500);
+		  gif_11.setFitWidth(500);
 		  gif_11.setScaleX(1.3);
 		    if (gif_11 != null) {
 		        gif_11.setVisible(true);

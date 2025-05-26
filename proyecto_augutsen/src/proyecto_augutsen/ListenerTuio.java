@@ -77,7 +77,7 @@ public class ListenerTuio implements TuioListener{
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
         
-                if((to.getSymbolID()!=3)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
+                if((to.getSymbolID()!=113)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
                 
                 	if (imageV != null) {//verifica que el objeto exista 
                 		imageV.setVisible(true);
@@ -170,7 +170,7 @@ public class ListenerTuio implements TuioListener{
             
             ImageView imageV = this.imagenV.getImagen(obj.getSessionID());
             if (imageV != null) {
-                if (obj.getSymbolID() != 3) {
+                if (obj.getSymbolID() != 113) {
                     if (this._nivel == 0) {	
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
                         	
@@ -207,7 +207,7 @@ public class ListenerTuio implements TuioListener{
 
                             // Evitar actualizaciones constantes de rotación si el cambio es mínimo
                             double anguloActual = imageV.getRotate();
-                            if (Math.abs(anguloActual - angle) > 1) { 
+                            if (Math.abs(anguloActual - angle) > 60) { 
                                 imageV.setRotate(angle);
                             	//eliminar gifs del nivel 1
                 				this.gifView.EliminarGifs_nivel1();	

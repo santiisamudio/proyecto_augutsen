@@ -1,6 +1,7 @@
 package proyecto_augutsen;
 
 import java.net.URL;
+import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -12,484 +13,113 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class VideoMonitor {
-	private Stage _primerMonitor;
-	private Stage _segundoMonitor;
-	private MediaPlayer reproductor;
-	private MediaPlayer reproductorSegundoMonitor;
+	private Stage _primerMonitor = null;
+	private Stage _segundoMonitor = null;
+	private MediaPlayer reproductorPrimerMonitor= null;
+	private MediaPlayer reproductor= null;
+	private MediaView mediaViewPrimerMonitor= null;
+	private MediaView mediaMiewSegundoMonitor= null;
 	public VideoMonitor() {
 		
 	}
-	
-	
-	
-	
-	public void iniciarVideoProyector() {
-    	Platform.runLater(() -> {
-            if (this._segundoMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
+	public void reproducirVideoEmocion(String emocion) {
+		switch(emocion) {
+		case "miedo": 
+			this.iniciarVideoEnSegundoMonitor("/videos/02e2_miedo.mp4");
+		
+		break;
+		case "sorpresa":
+			this.iniciarVideoEnSegundoMonitor("/videos/02e7_Hmm.mp4");
+		break;
+		
+		case "alegria":
+			this.iniciarVideoEnSegundoMonitor("/videos/02e6_alegria.mp4");
+		break;
+		
+		case "tristeza":
+			this.iniciarVideoEnSegundoMonitor("/videos/02e3_tristeza.mp4");
+		break;
+		
+		case "ira":
+			this.iniciarVideoEnSegundoMonitor("/videos/02e1_ira.mp4");
+		break;
+		
+		case "desagrado":
+			this.iniciarVideoEnSegundoMonitor("/videos/02e4_asco.mp4");
+		break;
+		}
+	}
+	public void iniciarVideoEnSegundoMonitor(String urlVideo) {
+	    Platform.runLater(() -> {
+	        var monitores = Screen.getScreens();
+	        if (monitores.size() < 2) {
+	            System.out.println("Se necesitan al menos 2 monitores");
+	            return;
+	        }
 
-                    this._segundoMonitor = new Stage();
-                    this._segundoMonitor.setTitle("Video");
+	        Screen segundoMonitor = monitores.get(1);
+	        Rectangle2D dimensiones = segundoMonitor.getBounds();
 
-                    String link = "/videos/01_cucarachonCuentaSuPlanMalvado.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
+	        if (_segundoMonitor == null) {
+	        	_segundoMonitor = new Stage();
+	        	_segundoMonitor.setTitle("Segundo Monitor");
+	        	_segundoMonitor.setX(dimensiones.getMinX());
+	        	_segundoMonitor.setY(dimensiones.getMinY());
+	        	_segundoMonitor.setWidth(dimensiones.getWidth());
+	        	_segundoMonitor.setHeight(dimensiones.getHeight());
+	        }
 
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._segundoMonitor.setScene(videoScene);
+	        // Si ya hay un reproductor, detener y liberar recursos
+	        if (reproductor != null) {
+	        	reproductor.stop();
+	            reproductor.dispose();
+	        }
 
-                    this._segundoMonitor.setX(dimensiones.getMinX());
-                    this._segundoMonitor.setY(dimensiones.getMinY());
-                    this._segundoMonitor.setWidth(dimensiones.getWidth());
-                    this._segundoMonitor.setHeight(dimensiones.getHeight());
+	        // Crear nuevo MediaPlayer para el video que queremos reproducir
+	        URL videoURL = getClass().getResource(urlVideo);
+	        if (videoURL == null) {
+	            System.out.println("Video no encontrado: " + urlVideo);
+	            return;
+	        }
+	        Media media = new Media(videoURL.toExternalForm());
+	        reproductor = new MediaPlayer(media);
 
-                    reproductor.setAutoPlay(true);
-                    this._segundoMonitor.show();
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-	
-	
-	//nuevo agregado mio
+	        if (mediaMiewSegundoMonitor == null) {
+	        	mediaMiewSegundoMonitor = new MediaView(reproductor);
+	            StackPane root = new StackPane(mediaMiewSegundoMonitor);
+	            Scene scene = new Scene(root);
+	            _segundoMonitor.setScene(scene);
+	        } else {
+	            // Actualizar mediaView con el nuevo reproductor
+	        	mediaMiewSegundoMonitor.setMediaPlayer(reproductor);
+	        }
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public void  iniciarSorpresa() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
+	        _segundoMonitor.show();
 
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e7_Hmm.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-	public void  iniciarAlegria() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e6_alegria.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-
-	public void  iniciarTristeza() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e3_tristeza.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-	public void  iniciarIra() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e1_ira.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-
-	public void  iniciarDesagrado() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e4_asco.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-	public void  iniciarMiedo() {
-    	Platform.runLater(() -> {
-    		if (this._primerMonitor == null) {
-                var monitores = Screen.getScreens();
-                if (monitores.size() > 1) {
-                    Screen segundoMonitor = monitores.get(1);
-                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-                    this._primerMonitor = new Stage();
-                    this._primerMonitor.setTitle("Video");
-
-                    String link = "/videos/02e2_miedo.mp4";
-                    URL videoURL = getClass().getResource(link);
-                    Media media = new Media(videoURL.toExternalForm());
-                    reproductor = new MediaPlayer(media);
-                    MediaView mediaView = new MediaView(reproductor);
-
-                    StackPane videoRoot = new StackPane(mediaView);
-                    Scene videoScene = new Scene(videoRoot);
-                    this._primerMonitor.setScene(videoScene);
-
-                    this._primerMonitor.setX(dimensiones.getMinX());
-                    this._primerMonitor.setY(dimensiones.getMinY());
-                    this._primerMonitor.setWidth(dimensiones.getWidth());
-                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-                    reproductor.setAutoPlay(true);
-                    this._primerMonitor.show();
-                    
-                    reproductor.setOnEndOfMedia(() -> {
-                        this._primerMonitor.close();
-                        System.out.println("Video finalizado. Ventana cerrada.");
-                        
-                    });
-                } else {
-                    System.out.println("Solo hay un monitor disponible");
-                    
-                }
-            } else {
-            	reproductor.play(); 
-            }
-        });
-    }
-
-	//probandoooo
-	/* private void iniciarv(String rutaVideo, boolean esSegundoMonitor) {
-	        Platform.runLater(() -> {
-	            var monitores = Screen.getScreens();
-	            if (monitores.size() > 1 || !esSegundoMonitor) {
-	                Screen monitor = esSegundoMonitor ? monitores.get(1) : monitores.get(0);
-	                Rectangle2D dimensiones = monitor.getBounds();
-
-	                Stage monitorActual = esSegundoMonitor ? this._segundoMonitor : this._primerMonitor;
-	                if (monitorActual == null) {
-	                    monitorActual = new Stage();
-	                    monitorActual.setTitle("Video");
-
-	                    URL videoURL = getClass().getResource(rutaVideo);
-	                    if (videoURL == null) {
-	                        System.out.println("Error: Video no encontrado");
-	                        return;
-	                    }
-
-	                    Media media = new Media(videoURL.toExternalForm());
-	                    reproductor = new MediaPlayer(media);
-	                    MediaView mediaView = new MediaView(reproductor);
-
-	                    StackPane videoRoot = new StackPane(mediaView);
-	                    Scene videoScene = new Scene(videoRoot);
-	                    monitorActual.setScene(videoScene);
-
-	                    monitorActual.setX(dimensiones.getMinX());
-	                    monitorActual.setY(dimensiones.getMinY());
-	                    monitorActual.setWidth(dimensiones.getWidth());
-	                    monitorActual.setHeight(dimensiones.getHeight());
-
-	                    reproductor.setAutoPlay(true);
-	                    monitorActual.show();
-
-	                 
-
-	                    if (esSegundoMonitor) {
-	                        this._segundoMonitor = monitorActual;
-	                    } else {
-	                        this._primerMonitor = monitorActual;
-	                    }
-	                } else {
-	                    reproductor.play(); 
-	                }
-	            } else {
-	                System.out.println("Solo hay un monitor disponible");
-	            }
+	        reproductor.setOnError(() -> {
+	            System.out.println("Error al reproducir video: " + reproductor.getError());
 	        });
-	    }
-	 */
-	 public void iniciarVideoInterferencia() {
-		 
-			Platform.runLater(() -> {
-	    		if (this._primerMonitor == null) {
-	                var monitores = Screen.getScreens();
-	                if (monitores.size() > 1) {
-	                    Screen segundoMonitor = monitores.get(2);
-	                    Rectangle2D dimensiones = segundoMonitor.getBounds();
 
-	                    this._primerMonitor = new Stage();
-	                    this._primerMonitor.setTitle("Video");
-
-	                    String link = "/videos/video interferencia.mp4";
-	                    URL videoURL = getClass().getResource(link);
-	                    Media media = new Media(videoURL.toExternalForm());
-	                    reproductor = new MediaPlayer(media);
-	                    MediaView mediaView = new MediaView(reproductor);
-
-	                    StackPane videoRoot = new StackPane(mediaView);
-	                    Scene videoScene = new Scene(videoRoot);
-	                    this._primerMonitor.setScene(videoScene);
-
-	                    this._primerMonitor.setX(dimensiones.getMinX());
-	                    this._primerMonitor.setY(dimensiones.getMinY());
-	                    this._primerMonitor.setWidth(dimensiones.getWidth());
-	                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-	                    reproductor.setAutoPlay(true);
-	                    this._primerMonitor.show();
-	                    
-	                    reproductor.setOnEndOfMedia(() -> {
-	                        this._primerMonitor.close();
-	                        System.out.println("Video finalizado. Ventana cerrada.");
-	                        
-	                    });
-	                } else {
-	                    System.out.println("Solo hay un monitor disponible");
-	                    
-	                }
-	            } else {
-	            	reproductor.play(); 
-	            }
+	        reproductor.setOnEndOfMedia(() -> {
+	            System.out.println("Video terminado en segundo monitor.");
+	            // Podés aquí llamar a otro método para iniciar el siguiente video si querés encadenar
 	        });
-	    }
 
+	        reproductor.play();
+	    });
+	}
 
-
-		public void carpincho() {
-	    	Platform.runLater(() -> {
-	    		if (this._primerMonitor == null) {
-	                var monitores = Screen.getScreens();
-	                if (monitores.size() > 1) {
-	                    Screen segundoMonitor = monitores.get(2);
-	                    Rectangle2D dimensiones = segundoMonitor.getBounds();
-
-	                    this._primerMonitor = new Stage();
-	                    this._primerMonitor.setTitle("Video");
-
-	                    String link = "/videos/carpinchoFInal.mp4";
-	                    URL videoURL = getClass().getResource(link);
-	                    Media media = new Media(videoURL.toExternalForm());
-	                    reproductor = new MediaPlayer(media);
-	                    MediaView mediaView = new MediaView(reproductor);
-
-	                    StackPane videoRoot = new StackPane(mediaView);
-	                    Scene videoScene = new Scene(videoRoot);
-	                    this._primerMonitor.setScene(videoScene);
-
-	                    this._primerMonitor.setX(dimensiones.getMinX());
-	                    this._primerMonitor.setY(dimensiones.getMinY());
-	                    this._primerMonitor.setWidth(dimensiones.getWidth());
-	                    this._primerMonitor.setHeight(dimensiones.getHeight());
-
-	                    reproductor.setAutoPlay(true);
-	                    this._primerMonitor.show();
-	                    
-	                    reproductor.setOnEndOfMedia(() -> {
-	                        this._primerMonitor.close();
-	                        System.out.println("Video finalizado. Ventana cerrada.");
-	                        
-	                    });
-	                } else {
-	                    System.out.println("Solo hay un monitor disponible");
-	                    
-	                }
-	            } else {
-	            	reproductor.play(); 
-	            }
-	        });
-	    }
 
 public void iniciarSecuenciaVideos() {
     Platform.runLater(() -> {
         var monitores = Screen.getScreens();
-        if (monitores.size() < 3) {
+        if (monitores.size() < 0) {
             System.out.println("Se necesitan al menos 3 monitores");
             return;
         }
 
-        Screen segundoMonitor = monitores.get(1); // cucarachon
-        Screen tercerMonitor = monitores.get(2);  // interferencia + carpincho
+        Screen segundoMonitor = monitores.get(0); // cucarachon
+        Screen tercerMonitor = monitores.get(1);  // interferencia + carpincho
 
         // --------- Video 1: Cucarachón ----------
         URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
@@ -499,12 +129,12 @@ public void iniciarSecuenciaVideos() {
         Stage stage1 = new Stage();
         stage1.setTitle("Cucarachón");
         stage1.setScene(new Scene(new StackPane(view1)));
-        Rectangle2D dim1 = segundoMonitor.getBounds();
+        Rectangle2D dim1 = tercerMonitor.getBounds();
         stage1.setX(dim1.getMinX());
         stage1.setY(dim1.getMinY());
         stage1.setWidth(dim1.getWidth());
         stage1.setHeight(dim1.getHeight());
-        stage1.show();
+        
 
         // --------- Video 2: Interferencia ----------
         URL url2 = getClass().getResource("/videos/video interferencia.mp4");
@@ -527,21 +157,38 @@ public void iniciarSecuenciaVideos() {
 
         Stage stage3 = new Stage();
         stage3.setTitle("Carpincho");
+        
+        Rectangle2D dim3 = segundoMonitor.getBounds();
         stage3.setScene(new Scene(new StackPane(view3)));
-        stage3.setX(dim2.getMinX());  // mismo que el de interferencia
-        stage3.setY(dim2.getMinY());
-        stage3.setWidth(dim2.getWidth());
-        stage3.setHeight(dim2.getHeight());
+        stage3.setX(dim3.getMinX());  // mismo que el de interferencia
+        stage3.setY(dim3.getMinY());
+        stage3.setWidth(dim3.getWidth());
+        stage3.setHeight(dim3.getHeight());
 
         // ENCADENAR VIDEOS
+     // Configurar player2 ON READY antes de comenzar
+        player2.setOnReady(() -> {
+            // listo para reproducir cuando sea llamado
+        });
+
+        // Configurar player3 ON READY antes de comenzar
+        player3.setOnReady(() -> {
+            // listo para reproducir cuando sea llamado
+        });
+
         player1.setOnEndOfMedia(() -> {
             stage1.close();
+            
             stage2.show();
             player2.play();
         });
 
         player2.setOnEndOfMedia(() -> {
             stage2.close();
+            if (player2 != null) {
+            	player2.stop();
+            	player2.dispose();
+	        }
             stage3.show();
             player3.play();
         });
@@ -551,8 +198,10 @@ public void iniciarSecuenciaVideos() {
             System.out.println("Secuencia finalizada.");
         });
 
-        // Comenzar la secuencia
+        // Finalmente comenzar la secuencia
+        stage1.show();
         player1.play();
+        
     });
 }
 }

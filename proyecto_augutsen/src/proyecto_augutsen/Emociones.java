@@ -16,7 +16,7 @@ public class Emociones {
 	 public void detectarObjetoEmocion(int idObjeto, ImagenesV imagenV) {
 	    	String emocion = imagenV.getImagenEmocionActual();
 	    	switch (idObjeto) {
-	        case 6:
+	        case 114:
 	            if (emocion.equals("alegria")){
 	            	this._emociones[0]=true;
 	        
@@ -26,7 +26,7 @@ public class Emociones {
 	        
 	            }
 	            break;
-	        case 7:
+	        case 116:
 	        	if (emocion.equals("enojo")){
 	            	this._emociones[1]=true;
 	            	imagenV.CrearIcono(0.930, 0.220, "/iconos/ira_carita.png");
@@ -34,7 +34,7 @@ public class Emociones {
 	           
 	            }
 	            break;
-	        case 8:
+	        case 115:
 	        	if (emocion.equals("miedo")){
 	            	this._emociones[2]=true;
 	            	imagenV.CrearIcono(0.800, 0.220, "/iconos/miedo_carita.png");
@@ -42,7 +42,7 @@ public class Emociones {
 	            
 	            }
 	            break;
-	        case 9:
+	        case 117:
 	        	if (emocion.equals("tristeza")){
 	            	this._emociones[3]=true;
 	            	imagenV.CrearIcono(0.865, 0.400, "/iconos/tristeza_carita.png");
@@ -50,7 +50,7 @@ public class Emociones {
 	            	
 	            }
 	            break;
-	        case 10:
+	        case 118:
 	        	if (emocion.equals("asco")){
 	            	this._emociones[4]=true;
 	            	imagenV.CrearIcono(0.930, 0.350, "/iconos/asco_carita_.png");
@@ -58,7 +58,7 @@ public class Emociones {
 	            	
 	            }
 	            break;
-	        case 11:
+	        case 119:
 	        	if (emocion.equals("sorpresa")){
 	            	this._emociones[5]=true;
 	            	imagenV.CrearIcono(0.800, 0.350, "/iconos/sorpresa_carita.png");
