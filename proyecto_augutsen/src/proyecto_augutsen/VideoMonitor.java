@@ -52,12 +52,12 @@ public class VideoMonitor {
 	public void iniciarVideoEnSegundoMonitor(String urlVideo) {
 	    Platform.runLater(() -> {
 	        var monitores = Screen.getScreens();
-	        if (monitores.size() < 2) {
+	        if (monitores.size() > 1) {
 	            System.out.println("Se necesitan al menos 2 monitores");
 	            return;
 	        }
 
-	        Screen segundoMonitor = monitores.get(1);
+	        Screen segundoMonitor = monitores.get(2);
 	        Rectangle2D dimensiones = segundoMonitor.getBounds();
 
 	        if (_segundoMonitor == null) {
@@ -113,13 +113,13 @@ public class VideoMonitor {
 public void iniciarSecuenciaVideos() {
     Platform.runLater(() -> {
         var monitores = Screen.getScreens();
-        if (monitores.size() < 0) {
-            System.out.println("Se necesitan al menos 3 monitores");
+        if (monitores.size() == 3) {
+            System.out.println("Se necesitan 3 monitores");
             return;
         }
 
-        Screen segundoMonitor = monitores.get(0); // cucarachon
-        Screen tercerMonitor = monitores.get(1);  // interferencia + carpincho
+        Screen segundoMonitor = monitores.get(1); // carpincho
+        Screen tercerMonitor = monitores.get(2);  // interferencia + augutsen
 
         // --------- Video 1: Cucarachón ----------
         URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
@@ -160,7 +160,7 @@ public void iniciarSecuenciaVideos() {
         
         Rectangle2D dim3 = segundoMonitor.getBounds();
         stage3.setScene(new Scene(new StackPane(view3)));
-        stage3.setX(dim3.getMinX());  // mismo que el de interferencia
+        stage3.setX(dim3.getMinX());  
         stage3.setY(dim3.getMinY());
         stage3.setWidth(dim3.getWidth());
         stage3.setHeight(dim3.getHeight());
