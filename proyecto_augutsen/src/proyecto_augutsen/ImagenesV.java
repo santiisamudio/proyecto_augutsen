@@ -1,6 +1,7 @@
 package proyecto_augutsen;
 
 import java.util.HashMap;
+import javafx.application.Platform;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -133,8 +134,54 @@ public class ImagenesV {
     	
     }
     
-    
+   public void AsignarImagenAugutsenNormal() {
+   	Image img = new Image(getClass().getResource("/imagenes/augutsen normal.jpeg").toExternalForm());
+   	this._imagenPrincipal.setImage(img);
+   } 
+   
     public String getImagenEmocionActual() {
     	return this.imagenEmocionActual;
     }
+    /*
+    public void mostrarImagenEnSegundoMonitor() {
+        Platform.runLater(() -> {
+            var monitores = Screen.getScreens();
+            if (monitores.size() < 2) {
+                System.out.println("Se necesita al menos 2 monitores.");
+                return;
+            }
+
+            Screen segundoMonitor = monitores.get(1);  // Primer monitor adicional
+            Rectangle2D bounds = segundoMonitor.getBounds();
+
+            // Cargar imagen (desde recursos)
+            URL url = getClass().getResource("/imagenes/miImagen.png");
+            if (url == null) {
+                System.err.println("No se encontró la imagen.");
+                return;
+            }
+            Image imagen = new Image(url.toExternalForm());
+
+            // Configurar vista
+            ImageView imageView = new ImageView(imagen);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(bounds.getWidth());
+            imageView.setFitHeight(bounds.getHeight());
+
+            // Crear escena y stage
+            StackPane root = new StackPane(imageView);
+            root.setStyle("-fx-background-color: black;");
+            Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
+
+            Stage imagenStage = new Stage();
+            imagenStage.setTitle("Imagen en Segundo Monitor");
+            imagenStage.setScene(scene);
+            imagenStage.setX(bounds.getMinX());
+            imagenStage.setY(bounds.getMinY());
+            imagenStage.setWidth(bounds.getWidth());
+            imagenStage.setHeight(bounds.getHeight());
+            imagenStage.show();
+        });
+    }
+    */
 }

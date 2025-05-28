@@ -63,16 +63,16 @@ public class PeriodicoInicial {
 	 
 	 public void eliminarMapa(int id) {
 	    	switch(id) {
-	    	case 109: this.seEliminaParte1();
+	    	case 121: this.seEliminaParte1();
 	    		
 	    		break;
-	    	case 110: this.seEliminaParte2();
+	    	case 122: this.seEliminaParte2();
 	    		
 				break;
-	    	case 111: this.seEliminaParte3();
+	    	case 123: this.seEliminaParte3();
 	    		
 				break;
-	    	case 112: this.seEliminaParte4();
+	    	case 131: this.seEliminaParte4();
 	    		
 				break;
 	    	
@@ -81,7 +81,7 @@ public class PeriodicoInicial {
 	 
 	 public void agregarMapa(int id, double x, double y, float angulo) { 
 	        switch(id) {
-	            case 109: 
+	            case 121: 
 	                if ((x > 0.1674) && (x < 0.5) && (y > 0.1241) && (y < 0.5)) {
 	                    if (angulo >= 90 && angulo < 180) {
 	                    	System.out.println(angulo);
@@ -90,7 +90,7 @@ public class PeriodicoInicial {
 	                    }
 	                }
 	                break;
-	            case 110: 
+	            case 122: 
 	            	
 	                if ((x > 0.5) && (x < 0.8330) && (y > 0.1241) && (y < 0.5)) {
 	                	
@@ -101,7 +101,7 @@ public class PeriodicoInicial {
 	                    }
 	                }
 	                break;
-	            case 111: 
+	            case 123: 
 	           
 	                if ((x > 0.1674) && (x < 0.5) && (y > 0.5) && (y < 0.8878)) {
 	                    if (angulo >= 0 && angulo < 90) {
@@ -111,7 +111,7 @@ public class PeriodicoInicial {
 	                    }
 	                }
 	                break;
-	            case 112: 
+	            case 131: 
 	          
 	                if ((x > 0.5) && (x < 0.8330) && (y > 0.5) && (y < 0.8878)) {
 	                	

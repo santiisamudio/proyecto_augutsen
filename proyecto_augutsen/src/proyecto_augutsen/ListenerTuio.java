@@ -77,7 +77,7 @@ public class ListenerTuio implements TuioListener{
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
         
-                if((to.getSymbolID()!=113)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
+                if((to.getSymbolID()!=125)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
                 
                 	if (imageV != null) {//verifica que el objeto exista 
                 		imageV.setVisible(true);
@@ -89,21 +89,19 @@ public class ListenerTuio implements TuioListener{
                     
                         if (this.periodico.estaCompleto() && !esperandoVaciarPeriodico) {
                             this.gifView.Gif_SacaPiezas(); 
-                            this._videos.iniciarSecuenciaVideos();
+                          //  this._videos.iniciarSecuenciaVideos();
                             esperandoVaciarPeriodico = true;
+                            System.out.print("esperando vaciar periodico true");
                         }
 
                         // Esto se verifica siempre que ya estuvo completo antes
+                        System.out.print("antes del if");
                         if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
+                        	System.out.print("sube nivel");
                             this.subirNivel();
                             esperandoVaciarPeriodico = false;
                         }
 
-              
-                        	
-                        	
-                        	
-                    
                 	
                         
                 }  	
@@ -125,7 +123,9 @@ public class ListenerTuio implements TuioListener{
         
 }
     
-  
+ public void sacarPiezas() {
+	 
+ }
     
     private void subirNivel() {
     	this._nivel++;
@@ -170,7 +170,7 @@ public class ListenerTuio implements TuioListener{
             
             ImageView imageV = this.imagenV.getImagen(obj.getSessionID());
             if (imageV != null) {
-                if (obj.getSymbolID() != 113) {
+                if (obj.getSymbolID() != 125) {
                     if (this._nivel == 0) {	
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
                         	
@@ -242,6 +242,8 @@ public class ListenerTuio implements TuioListener{
                     this.periodico.eliminarMapa(obj.getSymbolID());  
                  // Verificar si ahora el periódico está vacío y estamos esperando vaciado
                     if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
+                    	this._videos.iniciarSecuenciaVideos(this.imagenV);
+                    	System.out.print("sube nivel");
                         this.subirNivel();
                         esperandoVaciarPeriodico = false;
                     }

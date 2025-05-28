@@ -52,12 +52,12 @@ public class VideoMonitor {
 	public void iniciarVideoEnSegundoMonitor(String urlVideo) {
 	    Platform.runLater(() -> {
 	        var monitores = Screen.getScreens();
-	        if (monitores.size() > 1) {
+	        if (monitores.size() ==3 ) {
 	            System.out.println("Se necesitan al menos 2 monitores");
 	            return;
 	        }
 
-	        Screen segundoMonitor = monitores.get(2);
+	        Screen segundoMonitor = monitores.get(1);
 	        Rectangle2D dimensiones = segundoMonitor.getBounds();
 
 	        if (_segundoMonitor == null) {
@@ -75,7 +75,7 @@ public class VideoMonitor {
 	            reproductor.dispose();
 	        }
 
-	        // Crear nuevo MediaPlayer para el video que queremos reproducir
+	        // Crear nuevo MediaPlayer para el video
 	        URL videoURL = getClass().getResource(urlVideo);
 	        if (videoURL == null) {
 	            System.out.println("Video no encontrado: " + urlVideo);
@@ -102,15 +102,17 @@ public class VideoMonitor {
 
 	        reproductor.setOnEndOfMedia(() -> {
 	            System.out.println("Video terminado en segundo monitor.");
-	            // Podés aquí llamar a otro método para iniciar el siguiente video si querés encadenar
+	            
 	        });
 
 	        reproductor.play();
 	    });
 	}
 
+	
+	
 
-public void iniciarSecuenciaVideos() {
+public void iniciarSecuenciaVideos(ImagenesV imagenv) {
     Platform.runLater(() -> {
         var monitores = Screen.getScreens();
         if (monitores.size() == 3) {
@@ -118,8 +120,8 @@ public void iniciarSecuenciaVideos() {
             return;
         }
 
-        Screen segundoMonitor = monitores.get(1); // carpincho
-        Screen tercerMonitor = monitores.get(2);  // interferencia + augutsen
+        Screen segundoMonitor = monitores.get(0); // carpincho
+        Screen tercerMonitor = monitores.get(1);  // interferencia + augutsen
 
         // --------- Video 1: Cucarachón ----------
         URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
@@ -137,14 +139,17 @@ public void iniciarSecuenciaVideos() {
         
 
         // --------- Video 2: Interferencia ----------
-        URL url2 = getClass().getResource("/videos/video interferencia.mp4");
+        URL url2 = getClass().getResource("/videos/interferencia.mp4");
         MediaPlayer player2 = new MediaPlayer(new Media(url2.toExternalForm()));
         MediaView view2 = new MediaView(player2);
-
+        
+        view2.setFitWidth(1280); // Por ejemplo, Full HD width
+        view2.setFitHeight(720); // Por ejemplo, HD height
+        view2.setPreserveRatio(true); // Mantiene proporción original
         Stage stage2 = new Stage();
         stage2.setTitle("Interferencia");
         stage2.setScene(new Scene(new StackPane(view2)));
-        Rectangle2D dim2 = tercerMonitor.getBounds();
+        Rectangle2D dim2 = segundoMonitor.getBounds();
         stage2.setX(dim2.getMinX());
         stage2.setY(dim2.getMinY());
         stage2.setWidth(dim2.getWidth());
@@ -166,19 +171,19 @@ public void iniciarSecuenciaVideos() {
         stage3.setHeight(dim3.getHeight());
 
         // ENCADENAR VIDEOS
-     // Configurar player2 ON READY antes de comenzar
+     
         player2.setOnReady(() -> {
-            // listo para reproducir cuando sea llamado
+            
         });
 
-        // Configurar player3 ON READY antes de comenzar
+        
         player3.setOnReady(() -> {
-            // listo para reproducir cuando sea llamado
+            
         });
 
         player1.setOnEndOfMedia(() -> {
             stage1.close();
-            
+            imagenv.AsignarImagenAugutsenNormal();
             stage2.show();
             player2.play();
         });
@@ -198,10 +203,16 @@ public void iniciarSecuenciaVideos() {
             System.out.println("Secuencia finalizada.");
         });
 
-        // Finalmente comenzar la secuencia
+        // comenzar la secuencia
         stage1.show();
         player1.play();
         
     });
+    
+    
 }
+ 
+	
+
+
 }

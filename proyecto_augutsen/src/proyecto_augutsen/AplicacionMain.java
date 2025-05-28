@@ -18,7 +18,7 @@ import javafx.geometry.Rectangle2D;
  * @author santi
  */
 public class AplicacionMain extends Application{
-	private MediaPlayer reproductor;
+
 
 
     public void start(Stage primaryStage) {
