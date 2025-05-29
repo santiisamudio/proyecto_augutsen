@@ -1,11 +1,16 @@
 package proyecto_augutsen;
 
 import java.util.HashMap;
+import javafx.stage.Screen;
 import javafx.application.Platform;
-
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import java.net.URL;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class ImagenesV {
 	private HashMap<Long, ImageView> _imagenes = new HashMap<>();
@@ -70,6 +75,7 @@ public class ImagenesV {
     	this._imagenPrincipal.setPreserveRatio(false);
     	this._imagenPrincipal.setFitWidth(ancho);
     	this._imagenPrincipal.setFitHeight(alto);
+    	
     	this._imagenPrincipal.setId("background");
     	this._contenedor.getChildren().add(this._imagenPrincipal);
     }
@@ -90,42 +96,42 @@ public class ImagenesV {
    public void AsignarImagenRotacion(float angulo) {
     	if (angulo >= 0 && angulo < 60) {
     		
-    		this._videos.reproducirVideoEmocion("alegria");
+    		
             Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
             this._imagenPrincipal.setImage(img);
         	this.imagenEmocionActual=  "alegria";
         	
         } else if (angulo >= 60 && angulo < 120) {
         	
-        	this._videos.reproducirVideoEmocion("ira");
+        	
            Image img = new Image(getClass().getResource("/imagenes/seleccion_enojo.png").toExternalForm());
         this._imagenPrincipal.setImage(img);
          this.imagenEmocionActual= "enojo";
          
         } else if (angulo >= 120 && angulo < 180) {
         	
-        	this._videos.reproducirVideoEmocion("miedo");
+        	
         	Image img = new Image(getClass().getResource("/imagenes/seleccion_miedo.png").toExternalForm());
         	this._imagenPrincipal.setImage(img);
         	this.imagenEmocionActual= "miedo";
         	
         }  else if (angulo >= 180 && angulo < 240) {
         	
-        	this._videos.reproducirVideoEmocion("tristeza");
+        	
         	Image img = new Image(getClass().getResource("/imagenes/seleccion_triste.png").toExternalForm());
         	this._imagenPrincipal.setImage(img);
        	this.imagenEmocionActual= "tristeza";
        	
         } else if (angulo >= 240 && angulo < 300) {
         	
-        	this._videos.reproducirVideoEmocion("desagrado");
+        	
         	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion5.png").toExternalForm());
         	this._imagenPrincipal.setImage(img);
            this.imagenEmocionActual= "asco";
            
         } else if (angulo >= 300 && angulo < 360) {
         	
-            this._videos.reproducirVideoEmocion("sorpresa");
+            
         	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion6.png").toExternalForm());
         	this._imagenPrincipal.setImage(img);
         this.imagenEmocionActual= "sorpresa";
@@ -142,7 +148,7 @@ public class ImagenesV {
     public String getImagenEmocionActual() {
     	return this.imagenEmocionActual;
     }
-    /*
+    
     public void mostrarImagenEnSegundoMonitor() {
         Platform.runLater(() -> {
             var monitores = Screen.getScreens();
@@ -155,7 +161,7 @@ public class ImagenesV {
             Rectangle2D bounds = segundoMonitor.getBounds();
 
             // Cargar imagen (desde recursos)
-            URL url = getClass().getResource("/imagenes/miImagen.png");
+            URL url = getClass().getResource("/imagenes/augutsen normal.jpeg");
             if (url == null) {
                 System.err.println("No se encontró la imagen.");
                 return;
@@ -183,5 +189,5 @@ public class ImagenesV {
             imagenStage.show();
         });
     }
-    */
+    
 }

@@ -28,7 +28,7 @@ public class ListenerTuio implements TuioListener{
     	this._nivel= 0;
     	
         this._contenedor = contenedor;
-        this._emociones = new Emociones();
+        
         double ancho = Screen.getPrimary().getVisualBounds().getWidth();
         double alto = Screen.getPrimary().getVisualBounds().getHeight();    
         
@@ -40,6 +40,9 @@ public class ListenerTuio implements TuioListener{
         this.gifView.AsignarGif_nivel0(); 
         
         this._videos = new VideoMonitor();
+        
+        this._emociones = new Emociones(this._videos);
+        
         this.esperandoVaciarPeriodico = false;
 
     //    Platform.runLater(() -> this.iniciarCuca());
@@ -77,7 +80,7 @@ public class ListenerTuio implements TuioListener{
             this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
         	ImageView imageV = this.imagenV.getImagen(to.getSessionID());   
         
-                if((to.getSymbolID()!=125)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
+                if((to.getSymbolID()!=5)&&(this._nivel==0)&&(esCuadranteCentroMapa(to.getX(),to.getY()))){//se pasa la ubicacion del objeto TUIO para ver si se encuentra abajo a la derecha                    
                 
                 	if (imageV != null) {//verifica que el objeto exista 
                 		imageV.setVisible(true);
@@ -170,7 +173,7 @@ public class ListenerTuio implements TuioListener{
             
             ImageView imageV = this.imagenV.getImagen(obj.getSessionID());
             if (imageV != null) {
-                if (obj.getSymbolID() != 125) {
+                if (obj.getSymbolID() != 5) {
                     if (this._nivel == 0) {	
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
                         	
@@ -235,7 +238,7 @@ public class ListenerTuio implements TuioListener{
     public void removeTuioObject(TuioObject obj) {
         long idSesion= obj.getSessionID();
         Platform.runLater(() -> {
-            if(obj.getSymbolID()!=3){
+            if(obj.getSymbolID()!=5){
                 ImageView imageV = this.imagenV.EliminarImagen(idSesion);
                 if (imageV != null) {               	
                     this._contenedor.getChildren().remove(imageV);                
