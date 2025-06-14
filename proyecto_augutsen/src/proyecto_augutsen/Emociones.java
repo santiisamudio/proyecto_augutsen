@@ -23,7 +23,7 @@ public class Emociones {
 	            	this._emociones[0]=true;
 	        
 	            	imagenV.CrearIcono(0.865, 0.190, "/iconos/alegria_carita.png");
-	            	this._videos.reproducirVideoEmocion("alegria");
+	            	//this._videos.reproducirVideoEmocion("alegria");
 	            	System.out.print("agregado");
 	            
 	        

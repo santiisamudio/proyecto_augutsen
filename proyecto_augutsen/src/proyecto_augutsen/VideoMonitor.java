@@ -22,6 +22,7 @@ public class VideoMonitor {
 	public VideoMonitor() {
 		
 	}
+	/*
 	public void reproducirVideoEmocion(String emocion) {
 		switch(emocion) {
 		case "miedo": 
@@ -49,7 +50,7 @@ public class VideoMonitor {
 		break;
 		}
 	}
-	/*
+	
 	public void iniciarVideoEnSegundoMonitor(String urlVideo) {
 	    Platform.runLater(() -> {
 	        var monitores = Screen.getScreens();
@@ -111,12 +112,12 @@ public class VideoMonitor {
 	}
 */
 	
-	public void iniciarSecuenciaVideos(ImagenesV imagen) {
+	/*public void iniciarSecuenciaVideos(ImagenesV imagen) {
 	    Platform.runLater(() -> {
 	        var monitores = Screen.getScreens();
 
 	        Screen segundoMonitor = monitores.get(0); // carpincho
-	        Screen tercerMonitor = monitores.get(1);  // interferencia + augutsen
+	        Screen tercerMonitor = monitores.get(1);  //1 interferencia + augutsen
 
 	        // --------- Video 1: Cucarachón ----------
 	        URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
