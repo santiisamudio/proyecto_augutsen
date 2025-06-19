@@ -17,6 +17,8 @@ public class ImagenesV {
 	private Pane _contenedor;
 	private ImageView _imagenPrincipal;
 	private String imagenEmocionActual;
+	private Gifs gifView;
+
 	 //mio nuevo
 	private VideoMonitor _videos;
 	public ImagenesV(Pane contenedor) {
@@ -82,15 +84,81 @@ public class ImagenesV {
     
     public void AsignarImagenPrincipal() {
     	Image img = new Image(getClass().getResource("/imagenes/1_inicialRompecabezas.png").toExternalForm());
+    
     	this._imagenPrincipal.setImage(img);
     }
     
     
+    public void Detector() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-29.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(280);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(50);
+        imageView.setLayoutY(520);
+        imageView.setVisible(true);
+
+        this._contenedor.getChildren().add(imageView);
+    }
+
+    public void AsignarImagenDetectordeEmociones() {
+        // 1. Asignar fondo principal
+        Image fondo = new Image(getClass().getResource("/imagenes/Sala de escape 2025-02.png").toExternalForm());
+        this._imagenPrincipal.setImage(fondo);
+
+        // 2. Listener para cuando cambien las dimensiones
+        _contenedor.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            // Evitar agregar más de una vez
+            boolean yaExiste = _contenedor.getChildren().stream()
+                .anyMatch(n -> "detector".equals(n.getId()));
+            if (yaExiste) return;
+
+            // 3. Cargar imagen detector
+            URL detectorURL = getClass().getResource("/imagenes/Sala de escape 2025-29.png");
+            if (detectorURL == null) {
+                System.out.println("❌ No se encontró la imagen del detector.");
+                return;
+            }
+
+            Image detector = new Image(detectorURL.toExternalForm());
+            ImageView detectorView = new ImageView(detector);
+            detectorView.setPreserveRatio(true);
+            detectorView.setFitWidth(200);
+            detectorView.setFitHeight(200);
+            detectorView.setId("detector");
+
+            // 4. Calcular posición
+            double x = _contenedor.getWidth() - detectorView.getFitWidth() - 20;
+            double y = _contenedor.getHeight() - detectorView.getFitHeight() - 20;
+
+            System.out.println("Contenedor tamaño: " + _contenedor.getWidth() + "x" + _contenedor.getHeight());
+            System.out.println("Posición detector calculada: x=" + x + ", y=" + y);
+
+            // Si posición negativa, ajusta a cero
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+
+            detectorView.setLayoutX(x);
+            detectorView.setLayoutY(y);
+
+            // 5. Agregar y traer al frente
+            _contenedor.getChildren().add(detectorView);
+            detectorView.toFront();
+
+            System.out.println("✅ Detector de emociones agregado correctamente.");
+        });
+    }
+
+
+    
     public void AsignarImagenAugutsen() {
-    	Image img = new Image(getClass().getResource("/imagenes/2_panel_sinEmocion.png").toExternalForm());
+    	Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-02.png").toExternalForm());
     	
     	System.out.print("habilitado");
     	this._imagenPrincipal.setImage(img);
+    	this.Detector();
     }
     //LO SAQUE PORQUE REMPLACE LAS IMAGENES CON LOS VIDEOS DE AUGUTSEN 
    public void AsignarImagenRotacion(float angulo) {

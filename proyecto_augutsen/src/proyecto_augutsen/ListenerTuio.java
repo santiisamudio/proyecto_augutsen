@@ -92,7 +92,7 @@ public class ListenerTuio implements TuioListener{
                     
                         if (this.periodico.estaCompleto() && !esperandoVaciarPeriodico) {
                             this.gifView.Gif_SacaPiezas(); 
-                          //  this._videos.iniciarSecuenciaVideos();
+                           //this._videos.iniciarSecuenciaVideos();
                             esperandoVaciarPeriodico = true;
                             System.out.print("esperando vaciar periodico true");
                         }
@@ -126,9 +126,7 @@ public class ListenerTuio implements TuioListener{
         
 }
     
- public void sacarPiezas() {
-	 
- }
+
     
     private void subirNivel() {
     	this._nivel++;
@@ -137,21 +135,12 @@ public class ListenerTuio implements TuioListener{
 		this._contenedor.getChildren().removeIf(node -> node instanceof ImageView && !node.getId().equals("background"));//elimina las partes del rompecabezas del contenedor
 		this.imagenV.LimpiarContenedor();//limpia la imagen
 		//AGREGO MAS GIFS
-		this.gifView.AsignarGif_nivel1();
+	//	this.gifView.AsignarGif_nivel1();
 	
     
     }
     
-    
-    /*public void iniciarCuca() {
-    	if(this._nivel==-1) {
-    		//inicia en la tele la presentacion de la cucaracha y enla mesa interferencia
-			this._videos.iniciarVideoProyector();
-			this._videos.iniciarVideoInterferencia();
-			this._nivel++;
-			 
-    	}} */
-    
+  
     private boolean esCuadranteCentroMapa(double x, double y) {
     	return ((x>0.1674)&&(x<0.8330)&&(y>0.1241)&&(y<0.8878));
     }
@@ -245,7 +234,7 @@ public class ListenerTuio implements TuioListener{
                     this.periodico.eliminarMapa(obj.getSymbolID());  
                  // Verificar si ahora el periódico está vacío y estamos esperando vaciado
                     if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
-                    	this._videos.iniciarSecuenciaVideos(this.imagenV);
+                    //	this._videos.iniciarSecuenciaVideos(this.imagenV);
                     	System.out.print("sube nivel");
                         this.subirNivel();
                         esperandoVaciarPeriodico = false;

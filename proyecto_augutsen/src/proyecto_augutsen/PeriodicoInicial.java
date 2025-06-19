@@ -62,70 +62,51 @@ public class PeriodicoInicial {
 	 }
 	 
 	 public void eliminarMapa(int id) {
-	    	switch(id) {
-	    	case 1: this.seEliminaParte1();
-	    		
-	    		break;
-	    	case 2: this.seEliminaParte2();
-	    		
-				break;
-	    	case 3: this.seEliminaParte3();
-	    		
-				break;
-	    	case 4: this.seEliminaParte4();
-	    		
-				break;
-	    	
-	    	}
-	    }
+		    switch(id) {
+		        case 0: this.seEliminaParte1(); break;
+		        case 1: this.seEliminaParte2(); break;
+		        case 2: this.seEliminaParte3(); break;
+		        case 3: /* si no hay parte 3, puedes ignorar o agregar lógica*/ break;
+		        case 4: this.seEliminaParte4(); break;
+		        default: System.out.println("ID no contemplado para eliminarMapa: " + id);
+		    }
+		}
+
 	 
 	 public void agregarMapa(int id, double x, double y, float angulo) { 
-	        switch(id) {
-	            case 1: 
-	                if ((x > 0.1674) && (x < 0.5) && (y > 0.1241) && (y < 0.5)) {
-	                    if (angulo >= 90 && angulo < 180) {
-	                    	System.out.println(angulo);
-	                    	
-	                    	this.seEncuentraParte1();
-	                    }
-	                }
-	                break;
-	            case 2: 
-	            	
-	                if ((x > 0.5) && (x < 0.8330) && (y > 0.1241) && (y < 0.5)) {
-	                	
-	                    if (angulo >= 180 && angulo < 270) {
-	                    	System.out.println(angulo);
-	                    	
-	                    	this.seEncuentraParte2();
-	                    }
-	                }
-	                break;
-	            case 3: 
-	           
-	                if ((x > 0.1674) && (x < 0.5) && (y > 0.5) && (y < 0.8878)) {
-	                    if (angulo >= 0 && angulo < 90) {
-	                    	System.out.println(angulo);
-	                    	
-	                    	this.seEncuentraParte3();
-	                    }
-	                }
-	                break;
-	            case 4: 
-	          
-	                if ((x > 0.5) && (x < 0.8330) && (y > 0.5) && (y < 0.8878)) {
-	                	
-	                    if ((angulo >= 270) && (angulo < 360)) {
-	                    	
-	                    	System.out.println(angulo);
-	                    	
-	                    	this.seEncuentraParte4();
-	                    }
-	                }
-	                break;
-	            default:
-	                System.out.println("ID no válido");
-	                break;
-	        }
-	    }
+		    switch(id) {
+		        case 0: 
+		            if ((x > 0.1674) && (x < 0.5) && (y > 0.1241) && (y < 0.5)) {
+		                if (angulo >= 90 && angulo < 180) {
+		                    this.seEncuentraParte1();
+		                }
+		            }
+		            break;
+		        case 1: 
+		            if ((x > 0.5) && (x < 0.8330) && (y > 0.1241) && (y < 0.5)) {
+		                if (angulo >= 180 && angulo < 270) {
+		                    this.seEncuentraParte2();
+		                }
+		            }
+		            break;
+		        case 2: 
+		            if ((x > 0.1674) && (x < 0.5) && (y > 0.5) && (y < 0.8878)) {
+		                if (angulo >= 0 && angulo < 90) {
+		                    this.seEncuentraParte3();
+		                }
+		            }
+		            break;
+		        case 4: 
+		            if ((x > 0.5) && (x < 0.8330) && (y > 0.5) && (y < 0.8878)) {
+		                if ((angulo >= 270) && (angulo < 360)) {
+		                    this.seEncuentraParte4();
+		                }
+		            }
+		            break;
+		        default:
+		            System.out.println("ID no válido en agregarMapa: " + id);
+		            break;
+		    }
+		}
+
 }

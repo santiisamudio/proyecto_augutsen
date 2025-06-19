@@ -88,7 +88,7 @@ public class Gifs {
              gif3.setLayoutY(650); }
     }
     public void AsignarGif_nivel1() {
-    	double gifX_4 = 0.25 * this._contenedor.getWidth();
+    	/*double gifX_4 = 0.25 * this._contenedor.getWidth();
 		  double gifY_4 = 0.75 * this._contenedor.getHeight();
 		  this.gifView.CrearGif(1111, gifX_4, gifY_4, 1111, "/gifs/VJE4.gif");
 		  ImageView gif_4 = this.gifView.getGif(1111);
@@ -98,7 +98,8 @@ public class Gifs {
 		        gif_4.setLayoutX(100);
 		        gif_4.setLayoutY(700);
 		    }
-
+		    
+			*/
 		    double gifX_5 = 0.55 * this._contenedor.getWidth();
 		    double gifY_5 = 0.78 * this._contenedor.getHeight();
 		    this.gifView.CrearGif(1112, gifX_5, gifY_5, 1112, "/gifs/7SUp.gif");
@@ -132,6 +133,10 @@ public class Gifs {
 		    }
 
     }
+    
+    
+  
+    
     public void eliminar_sacarPiezas() {
     	ImageView gif_11 = this.gifView.getGif(555);
     	if (gif_11 != null) {
@@ -140,10 +145,11 @@ public class Gifs {
     }
     	
     public void EliminarGifs_nivel1() {
-    	ImageView gif_5 = this.gifView.getGif(1111);
+    	ImageView gif_5 = this.gifView.getGif(1112);
     	if (gif_5 != null) {
     	    this._contenedor.getChildren().remove(gif_5);
     	}
+    
     
     }
     
