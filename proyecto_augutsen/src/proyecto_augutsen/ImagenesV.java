@@ -92,17 +92,173 @@ public class ImagenesV {
     public void Detector() {
         Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-29.png").toExternalForm());
         ImageView imageView = new ImageView(img);
-
+        imageView.setId("detector"); // ✅ agregado
         imageView.setFitWidth(280);
         imageView.setFitHeight(280);
         imageView.setScaleX(1.3);
-        imageView.setLayoutX(50);
-        imageView.setLayoutY(520);
+        imageView.setLayoutX(100);
+        imageView.setLayoutY(650);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+
+    public void EmocionesGenerar() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-28.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+        imageView.setId("emocion"); // ✅ agregado
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(280);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1520);
+        imageView.setLayoutY(650);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+
+    public void Estado() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-09.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+        imageView.setId("estado"); // ✅ agregado
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(280);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1520);
+        imageView.setLayoutY(200);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+
+    public void BarraEnojo() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-05.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(750);
+        imageView.setFitHeight(100);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(600);
+        imageView.setLayoutY(130);
         imageView.setVisible(true);
 
         this._contenedor.getChildren().add(imageView);
     }
+    public void Enojo() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-35.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
 
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(200);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(130);
+        imageView.setLayoutY(250);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    public void IconoEnojoBien() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-27.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1520);
+        imageView.setLayoutY(400);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    
+    public void IconoDesagradoeBien() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-26.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1600);
+        imageView.setLayoutY(300);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    
+    public void IconoSorpresaeBien() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-23.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1520);
+        imageView.setLayoutY(300);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    public void IconoTristeMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-19.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1600);
+        imageView.setLayoutY(400);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    public void IconoFelizeMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-24.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1680);
+        imageView.setLayoutY(400);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    public void IconoTristeBien() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-25.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1600);
+        imageView.setLayoutY(400);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    
+    public void IconoMiedoBien() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-22.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1680);
+        imageView.setLayoutY(300);
+        imageView.setVisible(true);
+        this._contenedor.getChildren().add(imageView);
+    }
+    public void EmocionesGanadas() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-30.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(280);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(100);
+        imageView.setLayoutY(200);
+        imageView.setVisible(true);
+
+        this._contenedor.getChildren().add(imageView);
+    }
+    
     public void AsignarImagenDetectordeEmociones() {
         // 1. Asignar fondo principal
         Image fondo = new Image(getClass().getResource("/imagenes/Sala de escape 2025-02.png").toExternalForm());
@@ -159,6 +315,17 @@ public class ImagenesV {
     	System.out.print("habilitado");
     	this._imagenPrincipal.setImage(img);
     	this.Detector();
+    	this.EmocionesGenerar();
+    	this.Estado();
+    	this.BarraEnojo();
+    	this.EmocionesGanadas();
+    	this.Enojo();
+    	 this.IconoEnojoBien();
+    	 this.IconoTristeBien();
+    	 this.IconoFelizeMal();
+    	 this.IconoDesagradoeBien();
+    	 this.IconoSorpresaeBien();
+    	 this.IconoMiedoBien();
     }
     //LO SAQUE PORQUE REMPLACE LAS IMAGENES CON LOS VIDEOS DE AUGUTSEN 
    public void AsignarImagenRotacion(float angulo) {

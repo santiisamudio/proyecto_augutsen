@@ -19,7 +19,7 @@ public class Emociones {
 	    	String emocion = imagenV.getImagenEmocionActual();
 	    	switch (idObjeto) {
 	        case 6:
-	            if (emocion.equals("alegria")){
+	            if (emocion.equals("alegria") && (this._emociones[0]==false)){
 	            	this._emociones[0]=true;
 	        
 	            	imagenV.CrearIcono(0.865, 0.190, "/iconos/alegria_carita.png");
@@ -30,7 +30,7 @@ public class Emociones {
 	            }
 	            break;
 	        case 7:
-	        	if (emocion.equals("enojo")){
+	        	if (emocion.equals("enojo")&&(this._emociones[1]==false)){
 	        		
 	            	this._emociones[1]=true;
 	            	imagenV.CrearIcono(0.930, 0.220, "/iconos/ira_carita.png");
@@ -40,7 +40,7 @@ public class Emociones {
 	            }
 	            break;
 	        case 8:
-	        	if (emocion.equals("miedo")){
+	        	if (emocion.equals("miedo") &&(this._emociones[2]==false)){
 	        		
 	            	this._emociones[2]=true;
 	            	imagenV.CrearIcono(0.800, 0.220, "/iconos/miedo_carita.png");
@@ -50,7 +50,7 @@ public class Emociones {
 	            }
 	            break;
 	        case 9:
-	        	if (emocion.equals("tristeza")){
+	        	if (emocion.equals("tristeza") &&(this._emociones[3]==false) ){
 	            	this._emociones[3]=true;
 	            	imagenV.CrearIcono(0.865, 0.400, "/iconos/tristeza_carita.png");
 	            	this._videos.reproducirVideoEmocion("tristeza");
@@ -59,7 +59,7 @@ public class Emociones {
 	            }
 	            break;
 	        case 10:
-	        	if (emocion.equals("asco")){
+	        	if (emocion.equals("asco")&&(this._emociones[4]==false)){
 	            	this._emociones[4]=true;
 	            	imagenV.CrearIcono(0.930, 0.350, "/iconos/asco_carita_.png");
 	            	this._videos.reproducirVideoEmocion("desagrado");
@@ -68,7 +68,7 @@ public class Emociones {
 	            }
 	            break;
 	        case 11:
-	        	if (emocion.equals("sorpresa")){
+	        	if (emocion.equals("sorpresa")&&(this._emociones[5]==false)){
 	            	this._emociones[5]=true;
 	            	imagenV.CrearIcono(0.800, 0.350, "/iconos/sorpresa_carita.png");
 	            	this._videos.reproducirVideoEmocion("sorpresa");
