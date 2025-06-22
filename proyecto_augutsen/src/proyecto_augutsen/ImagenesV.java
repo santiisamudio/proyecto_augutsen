@@ -1,5 +1,4 @@
 package proyecto_augutsen;
-
 import java.util.HashMap;
 import javafx.stage.Screen;
 import javafx.application.Platform;
@@ -43,6 +42,14 @@ public class ImagenesV {
         
     }
     
+    public void EliminarImagenPorSesion(long idSesion) {
+        ImageView img = _imagenes.get(idSesion);
+        if (img != null) {
+            _contenedor.getChildren().remove(img); // Quitás del contenedor
+            _imagenes.remove(idSesion);            // Quitás del mapa
+        }
+    }
+   
     public void CrearIcono(double x, double y,String link) {
     	Image img = new Image(getClass().getResource(link).toExternalForm());
         ImageView imageV = new ImageView(img); 
@@ -57,7 +64,13 @@ public class ImagenesV {
         this._contenedor.getChildren().add(imageV);  // Agregamos la imagen al contenedor
     }
     
-    
+
+
+
+    public void setImagenEmocionActual(String emocion) {
+        this.imagenEmocionActual = emocion;
+    }
+
     
     public ImageView getImagen(long sesionId) {
     	return this._imagenes.get(sesionId);
@@ -100,6 +113,7 @@ public class ImagenesV {
         imageView.setLayoutY(650);
         imageView.setVisible(true);
         this._contenedor.getChildren().add(imageView);
+        imageView.setId("detector");
     }
 
     public void EmocionesGenerar() {
@@ -113,6 +127,7 @@ public class ImagenesV {
         imageView.setLayoutY(650);
         imageView.setVisible(true);
         this._contenedor.getChildren().add(imageView);
+        imageView.setId("emocion");
     }
 
     public void Estado() {
@@ -126,34 +141,37 @@ public class ImagenesV {
         imageView.setLayoutY(200);
         imageView.setVisible(true);
         this._contenedor.getChildren().add(imageView);
+        imageView.setId("estado");
+        
     }
 
-    public void BarraEnojo() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-05.png").toExternalForm());
+    public void Barra(String rutaImagen) {
+        Image img = new Image(getClass().getResource(rutaImagen).toExternalForm());
         ImageView imageView = new ImageView(img);
-
         imageView.setFitWidth(750);
         imageView.setFitHeight(100);
         imageView.setScaleX(1.3);
         imageView.setLayoutX(600);
         imageView.setLayoutY(130);
+        imageView.setId("barra"); 
         imageView.setVisible(true);
-
+        
         this._contenedor.getChildren().add(imageView);
     }
-    public void Enojo() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-35.png").toExternalForm());
+    public void EmocionPanel(String rutaImagen) {
+        Image img = new Image(getClass().getResource(rutaImagen).toExternalForm());
         ImageView imageView = new ImageView(img);
-
         imageView.setFitWidth(200);
         imageView.setFitHeight(200);
-        imageView.setScaleX(1.3);
         imageView.setLayoutX(130);
         imageView.setLayoutY(250);
+        imageView.setScaleX(1.3);
+        imageView.setId("emocionPanel"); 
         imageView.setVisible(true);
         this._contenedor.getChildren().add(imageView);
     }
-    
+
+
     public void IconoEnojoBien() {
         Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-27.png").toExternalForm());
         ImageView imageView = new ImageView(img);
@@ -164,6 +182,20 @@ public class ImagenesV {
         imageView.setLayoutX(1520);
         imageView.setLayoutY(400);
         imageView.setVisible(true);
+        imageView.setId("emocion7");
+        this._contenedor.getChildren().add(imageView);
+    }
+    public void IconoEnojoMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-20.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1520);
+        imageView.setLayoutY(400);
+        imageView.setVisible(true);
+        imageView.setId("emocion7");
         this._contenedor.getChildren().add(imageView);
     }
     
@@ -178,12 +210,79 @@ public class ImagenesV {
         imageView.setLayoutX(1600);
         imageView.setLayoutY(300);
         imageView.setVisible(true);
+        imageView.setId("emocion10");
         this._contenedor.getChildren().add(imageView);
     }
     
+    public void IconoDesagradoeMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-21.png").toExternalForm());
+        ImageView imageView = new ImageView(img);
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(1600);
+        imageView.setLayoutY(300);
+        imageView.setVisible(true);
+        imageView.setId("emocion10");
+        this._contenedor.getChildren().add(imageView);
+    }
     
-    public void IconoSorpresaeBien() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-23.png").toExternalForm());
+    public void mostrarIconoEmocion(int id, boolean bien) {
+        double x = 0, y = 0;
+
+        switch(id) {
+            case 6: x = 1680; y = 400; break;
+            case 7: x = 1520; y = 400; break;
+            case 8: x = 1680; y = 300; break;
+            case 9: x = 1600; y = 400; break;
+            case 10: x = 1600; y = 300; break;
+            case 11: x = 1520; y = 300; break;
+            default:
+                System.out.println("ID no reconocido: " + id);
+                return;
+        }
+
+        // Eliminar imagen previa en esa posición
+        final double fx = x, fy = y; // Necesario porque x, y son usadas dentro de una lambda
+        _contenedor.getChildren().removeIf(node -> {
+            if (node instanceof ImageView) {
+                double nx = ((ImageView) node).getLayoutX();
+                double ny = ((ImageView) node).getLayoutY();
+                return Math.abs(nx - fx) < 1 && Math.abs(ny - fy) < 1;
+            }
+            return false;
+        });
+
+        // Elegir ruta según id y emoción
+        String rutaImagen = switch(id) {
+            case 6 -> bien ? "/imagenes/Sala de escape 2025-24.png" : "/imagenes/Sala de escape 2025-18.png";
+            case 7 -> bien ? "/imagenes/Sala de escape 2025-27.png" : "/imagenes/Sala de escape 2025-20.png";
+            case 8 -> bien ? "/imagenes/Sala de escape 2025-22.png" : "/imagenes/Sala de escape 2025-16.png";
+            case 9 -> bien ? "/imagenes/Sala de escape 2025-25.png" : "/imagenes/Sala de escape 2025-19.png";
+            case 10 -> bien ? "/imagenes/Sala de escape 2025-26.png" : "/imagenes/Sala de escape 2025-21.png";
+            case 11 -> bien ? "/imagenes/Sala de escape 2025-23.png" : "/imagenes/Sala de escape 2025-17.png";
+            default -> null;
+        };
+
+        if (rutaImagen == null) return;
+
+        Image img = new Image(getClass().getResource(rutaImagen).toExternalForm());
+        ImageView imageView = new ImageView(img);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setScaleX(1.3);
+        imageView.setLayoutX(x);
+        imageView.setLayoutY(y);
+        imageView.setVisible(true);
+
+        _contenedor.getChildren().add(imageView);
+    }
+
+
+    
+    public void IconoSorpresaeMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-17.png").toExternalForm());
         ImageView imageView = new ImageView(img);
 
         imageView.setFitWidth(50);
@@ -192,9 +291,9 @@ public class ImagenesV {
         imageView.setLayoutX(1520);
         imageView.setLayoutY(300);
         imageView.setVisible(true);
+        imageView.setId("emocion11");
         this._contenedor.getChildren().add(imageView);
     }
-    
     public void IconoTristeMal() {
         Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-19.png").toExternalForm());
         ImageView imageView = new ImageView(img);
@@ -205,11 +304,12 @@ public class ImagenesV {
         imageView.setLayoutX(1600);
         imageView.setLayoutY(400);
         imageView.setVisible(true);
+        imageView.setId("emocion9");
         this._contenedor.getChildren().add(imageView);
     }
     
     public void IconoFelizeMal() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-24.png").toExternalForm());
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-18.png").toExternalForm());
         ImageView imageView = new ImageView(img);
 
         imageView.setFitWidth(50);
@@ -218,23 +318,11 @@ public class ImagenesV {
         imageView.setLayoutX(1680);
         imageView.setLayoutY(400);
         imageView.setVisible(true);
+        imageView.setId("emocion6");
         this._contenedor.getChildren().add(imageView);
-    }
-    public void IconoTristeBien() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-25.png").toExternalForm());
-        ImageView imageView = new ImageView(img);
-
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
-        imageView.setScaleX(1.3);
-        imageView.setLayoutX(1600);
-        imageView.setLayoutY(400);
-        imageView.setVisible(true);
-        this._contenedor.getChildren().add(imageView);
-    }
-    
-    public void IconoMiedoBien() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-22.png").toExternalForm());
+    }   
+    public void IconoMiedoMal() {
+        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-16.png").toExternalForm());
         ImageView imageView = new ImageView(img);
 
         imageView.setFitWidth(50);
@@ -243,6 +331,7 @@ public class ImagenesV {
         imageView.setLayoutX(1680);
         imageView.setLayoutY(300);
         imageView.setVisible(true);
+        imageView.setId("emocion8"); 
         this._contenedor.getChildren().add(imageView);
     }
     public void EmocionesGanadas() {
@@ -256,57 +345,21 @@ public class ImagenesV {
         imageView.setLayoutY(200);
         imageView.setVisible(true);
 
+        imageView.setId("imagenGanada"); // 
+
         this._contenedor.getChildren().add(imageView);
     }
-    
-    public void AsignarImagenDetectordeEmociones() {
-        // 1. Asignar fondo principal
-        Image fondo = new Image(getClass().getResource("/imagenes/Sala de escape 2025-02.png").toExternalForm());
-        this._imagenPrincipal.setImage(fondo);
+    public void EliminarEmocionGanada() {
+        _contenedor.getChildren().removeIf(node -> {
+            if (!(node instanceof ImageView)) return false;
 
-        // 2. Listener para cuando cambien las dimensiones
-        _contenedor.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-            // Evitar agregar más de una vez
-            boolean yaExiste = _contenedor.getChildren().stream()
-                .anyMatch(n -> "detector".equals(n.getId()));
-            if (yaExiste) return;
-
-            // 3. Cargar imagen detector
-            URL detectorURL = getClass().getResource("/imagenes/Sala de escape 2025-29.png");
-            if (detectorURL == null) {
-                System.out.println("❌ No se encontró la imagen del detector.");
-                return;
-            }
-
-            Image detector = new Image(detectorURL.toExternalForm());
-            ImageView detectorView = new ImageView(detector);
-            detectorView.setPreserveRatio(true);
-            detectorView.setFitWidth(200);
-            detectorView.setFitHeight(200);
-            detectorView.setId("detector");
-
-            // 4. Calcular posición
-            double x = _contenedor.getWidth() - detectorView.getFitWidth() - 20;
-            double y = _contenedor.getHeight() - detectorView.getFitHeight() - 20;
-
-            System.out.println("Contenedor tamaño: " + _contenedor.getWidth() + "x" + _contenedor.getHeight());
-            System.out.println("Posición detector calculada: x=" + x + ", y=" + y);
-
-            // Si posición negativa, ajusta a cero
-            if (x < 0) x = 0;
-            if (y < 0) y = 0;
-
-            detectorView.setLayoutX(x);
-            detectorView.setLayoutY(y);
-
-            // 5. Agregar y traer al frente
-            _contenedor.getChildren().add(detectorView);
-            detectorView.toFront();
-
-            System.out.println("✅ Detector de emociones agregado correctamente.");
+            String id = node.getId();
+            return "imagenGanada".equals(id)
+                || "estado".equals(id)
+                || "emocion".equals(id)
+                || "detector".equals(id);
         });
     }
-
 
     
     public void AsignarImagenAugutsen() {
@@ -317,59 +370,67 @@ public class ImagenesV {
     	this.Detector();
     	this.EmocionesGenerar();
     	this.Estado();
-    	this.BarraEnojo();
+    	
     	this.EmocionesGanadas();
-    	this.Enojo();
-    	 this.IconoEnojoBien();
-    	 this.IconoTristeBien();
+    
+    	// this.IconoEnojoBien();
+    	this.IconoEnojoMal();
+    	// this.IconoTristeBien();
+      this.IconoTristeMal();
     	 this.IconoFelizeMal();
-    	 this.IconoDesagradoeBien();
-    	 this.IconoSorpresaeBien();
-    	 this.IconoMiedoBien();
+    	 //this.IconoFelizeBien();
+    	// this.IconoDesagradoeBien();
+    	this.IconoDesagradoeMal();
+    	// this.IconoSorpresaeBien();
+    	 this.IconoSorpresaeMal();
+    	this.IconoMiedoMal(); 
     }
     //LO SAQUE PORQUE REMPLACE LAS IMAGENES CON LOS VIDEOS DE AUGUTSEN 
    public void AsignarImagenRotacion(float angulo) {
+	   _contenedor.getChildren().removeIf(node -> {
+		    if (!(node instanceof ImageView)) return false;
+		    String id = node.getId();
+		    return "emocionPanel".equals(id) || "barra".equals(id);
+		});
     	if (angulo >= 0 && angulo < 60) {
     		
-    		
-            Image img = new Image(getClass().getResource("/imagenes/3_panel_seleccionAlegria.png").toExternalForm());
-            this._imagenPrincipal.setImage(img);
+    	  
         	this.imagenEmocionActual=  "alegria";
-        	
+            this.EmocionPanel("/imagenes/Sala de escape 2025-33.png");
+            this.Barra("/imagenes/Sala de escape 2025-07.png");
         } else if (angulo >= 60 && angulo < 120) {
         	
-        	
-           Image img = new Image(getClass().getResource("/imagenes/seleccion_enojo.png").toExternalForm());
-        this._imagenPrincipal.setImage(img);
-         this.imagenEmocionActual= "enojo";
-         
+           
+           this.imagenEmocionActual= "enojo";
+           this.Barra("/imagenes/Sala de escape 2025-05.png");
+           this.EmocionPanel("/imagenes/Sala de escape 2025-35.png");
         } else if (angulo >= 120 && angulo < 180) {
         	
         	
-        	Image img = new Image(getClass().getResource("/imagenes/seleccion_miedo.png").toExternalForm());
-        	this._imagenPrincipal.setImage(img);
+  
         	this.imagenEmocionActual= "miedo";
-        	
+            this.EmocionPanel("/imagenes/Sala de escape 2025-31.png");
+            this.Barra("/imagenes/Sala de escape 2025-03.png");
         }  else if (angulo >= 180 && angulo < 240) {
         	
-        	
-        	Image img = new Image(getClass().getResource("/imagenes/seleccion_triste.png").toExternalForm());
-        	this._imagenPrincipal.setImage(img);
-       	this.imagenEmocionActual= "tristeza";
-       	
+  
+        	this.imagenEmocionActual= "tristeza";
+        	this.EmocionPanel("/imagenes/Sala de escape 2025-36.png");
+        	this.Barra("/imagenes/Sala de escape 2025-06.png");
         } else if (angulo >= 240 && angulo < 300) {
         	
         	
-        	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion5.png").toExternalForm());
-        	this._imagenPrincipal.setImage(img);
-           this.imagenEmocionActual= "asco";
-           
+        
+        	this.imagenEmocionActual= "asco";
+        	this.EmocionPanel("/imagenes/Sala de escape 2025-34.png");
+        	this.Barra("/imagenes/Sala de escape 2025-04.png");
         } else if (angulo >= 300 && angulo < 360) {
         	
             
-        	Image img = new Image(getClass().getResource("/imagenes/seleccion_emocion6.png").toExternalForm());
-        	this._imagenPrincipal.setImage(img);
-        this.imagenEmocionActual= "sorpresa";
+        
+        	this.imagenEmocionActual= "sorpresa";
+        	this.EmocionPanel("/imagenes/Sala de escape 2025-32.png");
+            this.Barra("/imagenes/Sala de escape 2025-08.png");
         
         }
     	
@@ -383,7 +444,8 @@ public class ImagenesV {
     public String getImagenEmocionActual() {
     	return this.imagenEmocionActual;
     }
-    
+ 
+
     public void mostrarImagenEnSegundoMonitor() {
         Platform.runLater(() -> {
             var monitores = Screen.getScreens();

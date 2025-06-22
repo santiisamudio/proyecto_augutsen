@@ -86,6 +86,8 @@ public class ListenerTuio implements TuioListener {
                     imageV.setX(x);
                     imageV.setY(y);
                     this.imagenV.AsignarImagenRotacion(to.getAngleDegrees());
+                    this.imagenV.EliminarEmocionGanada();
+                    // Podrías detectar emoción aquí si hace falta
                 }
             }
         });
@@ -123,9 +125,11 @@ public class ListenerTuio implements TuioListener {
     private boolean esCuadranteInferiorIzquierdo(double x, double y) {
         return ((x > 0.0195) && (x < 0.210) && (y > 0.6570) && (y < 0.930));
     }
-
     @Override
-    public void updateTuioObject(TuioObject obj) {
+    
+ 
+
+       public void updateTuioObject(TuioObject obj) {
         double x = obj.getX();
         double y = obj.getY();
         double angle = obj.getAngleDegrees();
@@ -146,10 +150,24 @@ public class ListenerTuio implements TuioListener {
                             imageV.setVisible(false);
                             this.periodico.eliminarMapa(obj.getSymbolID());
                         }
-                    } else {
-                        if (this.esCuadranteCentroMapa(x, y)) {
-                            System.out.print("entra al if");
-                            this._emociones.detectarObjetoEmocion(obj.getSymbolID(), this.imagenV);
+                    } else if (this._nivel == 1) {
+                        boolean dentroDelCuadrante = esCuadranteInferiorIzquierdo(x, y);
+
+                        if (dentroDelCuadrante) {
+                            imageV.setVisible(true);
+                            imageV.setX(x * this._contenedor.getWidth());
+                            imageV.setY(y * this._contenedor.getHeight());
+
+                            double anguloActual = imageV.getRotate();
+                            if (Math.abs(anguloActual - angle) > 60) {
+                                imageV.setRotate(angle);
+                                this.gifView.EliminarGifs_nivel1();
+                                this.imagenV.AsignarImagenRotacion(obj.getAngleDegrees());
+                                // Aquí se agrega la llamada para detectar la emoción
+                                this._emociones.detectarObjetoEmocion(obj.getSymbolID(), this.imagenV);
+                            }
+                        } else {
+                            imageV.setVisible(false);
                         }
                     }
                 } else {
@@ -166,6 +184,7 @@ public class ListenerTuio implements TuioListener {
                                 imageV.setRotate(angle);
                                 this.gifView.EliminarGifs_nivel1();
                                 this.imagenV.AsignarImagenRotacion(obj.getAngleDegrees());
+                                this._emociones.detectarObjetoEmocion(obj.getSymbolID(), this.imagenV);
                             }
                         } else {
                             imageV.setVisible(false);
