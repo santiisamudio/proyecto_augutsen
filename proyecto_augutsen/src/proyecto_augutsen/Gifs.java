@@ -59,14 +59,14 @@ public class Gifs {
     }
     public void AsignarGif_nivel0() {
     	 this.gifView = new Gifs(this._contenedor); 
-         double gifX = 0.097 * this._contenedor.getWidth();  // centro X del cuadrante sup izq
-         double gifY = 0.11 * this._contenedor.getHeight();   // centro Y del cuadrante sup izq
+         double gifX = 0.062 * this._contenedor.getWidth();  // centro X del cuadrante sup izq
+         double gifY = 0.6 * this._contenedor.getHeight();   // centro Y del cuadrante sup izq
          this.gifView.CrearGif(999, gifX, gifY, 999, "/gifs/4RNk.gif");
          ImageView gif = this.gifView.getGif(999);
          if (gif != null) {
              gif.setVisible(true);
-             gif.setLayoutX(30);  // CORREGIDO
-             gif.setLayoutY(270);  // CORREGIDO
+             gif.setLayoutX(5);  // CORREGIDO
+             gif.setLayoutY(200);  // CORREGIDO
          }
 
          double gifX2 = 0.5 * this._contenedor.getWidth();
@@ -75,17 +75,17 @@ public class Gifs {
          ImageView gif2 = this.gifView.getGif(888);
          if (gif2 != null) {
              gif2.setVisible(true);
-             gif2.setLayoutX(30);
-             gif2.setLayoutY(650); }
+             gif2.setLayoutX(10);
+             gif2.setLayoutY(550); }
          //gif3
-         double gifX3 = 0.5 * this._contenedor.getWidth();
-         double gifY3 = 0.5 * this._contenedor.getHeight();
+         double gifX3 = 0.2 * this._contenedor.getWidth();
+         double gifY3 = 0.2 * this._contenedor.getHeight();
          this.gifView.CrearGif(777, gifX3, gifY3,777, "/gifs/VJl.gif");
          ImageView gif3 = this.gifView.getGif(777);
          if (gif3 != null) {
              gif3.setVisible(true);
-             gif3.setLayoutX(1640);
-             gif3.setLayoutY(650); }
+             gif3.setLayoutX(1300);
+             gif3.setLayoutY(450); }
     }
     public void AsignarGif_nivel1() {
     	/*double gifX_4 = 0.25 * this._contenedor.getWidth();
@@ -137,6 +137,7 @@ public class Gifs {
     
   
     
+    
     public void eliminar_sacarPiezas() {
     	ImageView gif_11 = this.gifView.getGif(555);
     	if (gif_11 != null) {
@@ -152,5 +153,7 @@ public class Gifs {
     
     
     }
+    
+    
     
 }

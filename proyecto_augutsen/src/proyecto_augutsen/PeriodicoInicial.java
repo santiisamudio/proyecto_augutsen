@@ -66,7 +66,7 @@ public class PeriodicoInicial {
 		        case 0: this.seEliminaParte1(); break;
 		        case 1: this.seEliminaParte2(); break;
 		        case 2: this.seEliminaParte3(); break;
-		        case 3: /* si no hay parte 3, puedes ignorar o agregar lógica*/ break;
+		       
 		        case 4: this.seEliminaParte4(); break;
 		        default: System.out.println("ID no contemplado para eliminarMapa: " + id);
 		    }

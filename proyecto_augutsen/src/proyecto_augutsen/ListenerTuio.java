@@ -14,6 +14,8 @@ public class ListenerTuio implements TuioListener {
     private Pane _contenedor;
     private int _nivel;
 
+
+
     private ImagenesV imagenV;
     private PeriodicoInicial periodico;
     private Emociones _emociones;
@@ -23,7 +25,7 @@ public class ListenerTuio implements TuioListener {
 
     private boolean[] _emocion;
 
-    public ListenerTuio(Pane contenedor) {
+   public ListenerTuio(Pane contenedor) {
         this.periodico = new PeriodicoInicial();
         this._nivel = 0;
         this._contenedor = contenedor;
@@ -49,22 +51,26 @@ public class ListenerTuio implements TuioListener {
         }
     }
 
+
     @Override
     public void addTuioObject(TuioObject to) {
         System.out.println("Object added: " + to.getSymbolID());
         Platform.runLater(() -> {
             int id_simbolo = to.getSymbolID();
-            double x = to.getX() * this._contenedor.getWidth();
-            double y = to.getY() * this._contenedor.getHeight();
-            this.imagenV.CrearImagen(id_simbolo, x, y, to.getSessionID());
+            double x = to.getX();
+            double y = to.getY();
+            double posX = x * this._contenedor.getWidth();
+            double posY = y * this._contenedor.getHeight();
+
+            this.imagenV.CrearImagen(id_simbolo, posX, posY, to.getSessionID());
             ImageView imageV = this.imagenV.getImagen(to.getSessionID());
 
-            if ((to.getSymbolID() != 5) && (this._nivel == 0) && (esCuadranteCentroMapa(to.getX(), to.getY()))) {
+            if (id_simbolo != 3 && this._nivel == 0 && esCuadranteCentroMapa(x, y)) {
                 if (imageV != null) {
                     imageV.setVisible(true);
-                    imageV.setX(x);
-                    imageV.setY(y);
-                    this.periodico.agregarMapa(to.getSymbolID(), to.getX(), to.getY(), to.getAngleDegrees());
+                    imageV.setX(posX);
+                    imageV.setY(posY);
+                    this.periodico.agregarMapa(id_simbolo, x, y, to.getAngleDegrees());
                     System.out.println(periodico.toString());
 
                     if (this.periodico.estaCompleto() && !esperandoVaciarPeriodico) {
@@ -73,19 +79,49 @@ public class ListenerTuio implements TuioListener {
                         System.out.print("esperando vaciar periodico true");
                     }
 
-                    System.out.print("antes del if");
                     if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
-                        System.out.print("sube nivel");
+                        System.out.println("sube nivel");
                         this.subirNivel();
                         esperandoVaciarPeriodico = false;
                     }
                 }
-            } else if ((to.getSymbolID() == 3) && (this._nivel == 1) && (esCuadranteInferiorIzquierdo(to.getX(), to.getY()))) {
-                if (imageV != null) {
-                    imageV.setVisible(true);
-                    imageV.setX(x);
-                    imageV.setY(y);
-                    this.imagenV.AsignarImagenRotacion(to.getAngleDegrees());
+            }
+            // Nivel 1 para emociones IDs 6 a 11 en cuadrante centro
+            else if (this._nivel == 1) {
+                boolean adentroDelCuadrante = esCuadranteCentroMapaMasgrande(x, y);
+                //System.out.println("→ Nivel 1, ID: " + id_simbolo + ", en centro: " + dentroDelCuadrante);
+                //System.out.println("📍 Coordenadas objeto ID " + id_simbolo + ": x=" + x + ", y=" + y);
+                if (adentroDelCuadrante && id_simbolo >= 6 && id_simbolo <= 11) {
+                    System.out.println("✅ ID " + id_simbolo + " en cuadrante centro y válido (6–11), imageV: " + (imageV != null));
+                   
+
+                    if (imageV != null) {
+                        imageV.setVisible(true);
+                        imageV.setX(posX);
+                        imageV.setY(posY);
+                        imageV.setPickOnBounds(true);
+                        imageV.setMouseTransparent(false);
+                        System.out.println("holaaaa");
+                        imageV.setOnMouseClicked(event -> {
+                            System.out.println("👉 Click detectado sobre imagen ID: " + id_simbolo);
+                            imagenV.validarSeleccionUsuario(id_simbolo);
+                        });
+                    }
+                }
+                // ID 3 en cuadrante inferior izquierdo para rotación
+                else if (id_simbolo == 3 && esCuadranteInferiorIzquierdo(x, y)) {
+                    if (imageV != null) {
+                        imageV.setVisible(true);
+                        imageV.setX(posX);
+                        imageV.setY(posY);
+
+                        this.imagenV.permitirRotacion(true);
+                        this.imagenV.AsignarImagenRotacion(to.getAngleDegrees(), id_simbolo);
+                        this.imagenV.permitirRotacion(false);
+                        this.imagenV.EliminarEmocionGanada();
+                    }
+                } else {
+                    System.out.println("⚠️ ID " + id_simbolo + " no está en el centro ni es ID 3 en el inferior izquierdo.");
                 }
             }
         });
@@ -93,8 +129,6 @@ public class ListenerTuio implements TuioListener {
 
     private void subirNivel() {
         this._nivel++;
-
-        // ✅ Primero limpiamos el contenedor (pero conservando ciertas imágenes)
         this._contenedor.getChildren().removeIf(node -> {
             if (node instanceof ImageView) {
                 String id = node.getId();
@@ -107,10 +141,10 @@ public class ListenerTuio implements TuioListener {
             return false;
         });
 
-        // ✅ Limpiamos solo las piezas (rompecabezas)
+        //  Limpiamos solo las piezas (rompecabezas)
         this.imagenV.LimpiarContenedor();
 
-        // ✅ Luego agregamos las imágenes del nuevo nivel
+        // Luego agregamos las imágenes del nuevo nivel
         this.imagenV.AsignarImagenAugutsen();
 
         // this.gifView.AsignarGif_nivel1(); // si querés volver a activar los gifs
@@ -123,8 +157,16 @@ public class ListenerTuio implements TuioListener {
     private boolean esCuadranteInferiorIzquierdo(double x, double y) {
         return ((x > 0.0195) && (x < 0.210) && (y > 0.6570) && (y < 0.930));
     }
+    
+    
+    public boolean esCuadranteCentroMapaMasgrande(double x, double y) {
+        return x >= 0.3 && x <= 0.7 && y >= 0.3 && y <= 0.7;
+    }
 
     @Override
+    
+ 
+ 
     public void updateTuioObject(TuioObject obj) {
         double x = obj.getX();
         double y = obj.getY();
@@ -133,7 +175,9 @@ public class ListenerTuio implements TuioListener {
         Platform.runLater(() -> {
             ImageView imageV = this.imagenV.getImagen(obj.getSessionID());
             if (imageV != null) {
-                if (obj.getSymbolID() != 5) {
+                int id_simbolo = obj.getSymbolID();
+
+                if (id_simbolo != 3) {
                     if (this._nivel == 0) {
                         boolean dentroDelCuadrante = esCuadranteCentroMapa(x, y);
 
@@ -144,28 +188,40 @@ public class ListenerTuio implements TuioListener {
                             this.periodico.agregarMapa(obj.getSymbolID(), x, y, obj.getAngleDegrees());
                         } else {
                             imageV.setVisible(false);
-                            this.periodico.eliminarMapa(obj.getSymbolID());
+                            this.periodico.eliminarMapa(id_simbolo);
                         }
-                    } else {
-                        if (this.esCuadranteCentroMapa(x, y)) {
-                            System.out.print("entra al if");
-                            this._emociones.detectarObjetoEmocion(obj.getSymbolID(), this.imagenV);
+                    } else if (this._nivel == 1) {
+                        boolean enCentro = esCuadranteCentroMapaMasgrande(x, y);
+                    //	System.out.println("📍 ID: " + id_simbolo + " | x: " + x + ", y: " + y);
+                        if (id_simbolo >= 6 && id_simbolo <= 11 && enCentro) {
+
+
+                            imageV.setVisible(true);
+                            imageV.setX(x * this._contenedor.getWidth());
+                            imageV.setY(y * this._contenedor.getHeight());
+                            imageV.setOnMouseClicked(event -> {
+                                System.out.println("👉 Click detectado sobre imagen ID: " + id_simbolo);
+                                imagenV.validarSeleccionUsuario(id_simbolo);
+                            });
+                        } else {
+                            imageV.setVisible(false);
                         }
                     }
                 } else {
                     if (this._nivel == 1) {
-                        boolean dentroDelCuadrante = esCuadranteInferiorIzquierdo(x, y);
-
-                        if (dentroDelCuadrante) {
+                        boolean enInferiorIzquierdo = esCuadranteInferiorIzquierdo(x, y);
+                        if (enInferiorIzquierdo) {
                             imageV.setVisible(true);
                             imageV.setX(x * this._contenedor.getWidth());
                             imageV.setY(y * this._contenedor.getHeight());
 
                             double anguloActual = imageV.getRotate();
-                            if (Math.abs(anguloActual - angle) > 60) {
-                                imageV.setRotate(angle);
-                                this.gifView.EliminarGifs_nivel1();
-                                this.imagenV.AsignarImagenRotacion(obj.getAngleDegrees());
+                           if (Math.abs(anguloActual - angle) > 60) {
+                            	imageV.setRotate(angle);
+                            	this.gifView.EliminarGifs_nivel1();
+                            	this.imagenV.AsignarImagenRotacion(obj.getAngleDegrees(), obj.getSymbolID());
+
+                             //   this._emociones.detectarObjetoEmocion(id_simbolo, this.imagenV);
                             }
                         } else {
                             imageV.setVisible(false);
@@ -180,16 +236,18 @@ public class ListenerTuio implements TuioListener {
     public void removeTuioObject(TuioObject obj) {
         long idSesion = obj.getSessionID();
         Platform.runLater(() -> {
-            if (obj.getSymbolID() != 5) {
+            if (obj.getSymbolID() != 3) {
                 ImageView imageV = this.imagenV.EliminarImagen(idSesion);
                 if (imageV != null) {
                     this._contenedor.getChildren().remove(imageV);
                     this.periodico.eliminarMapa(obj.getSymbolID());
 
                     if (esperandoVaciarPeriodico && this.periodico.estaVacio()) {
+                    	this._videos.iniciarSecuenciaVideos(imagenV);
                         System.out.print("sube nivel");
                         this.subirNivel();
                         esperandoVaciarPeriodico = false;
+                        
                     }
                 }
             } else {

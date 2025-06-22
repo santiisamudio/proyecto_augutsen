@@ -113,13 +113,19 @@ public class VideoMonitor {
 	
 	public void iniciarSecuenciaVideos(ImagenesV imagen) {
 	    Platform.runLater(() -> {
-	        var monitores = Screen.getScreens();
+	    	var monitores = Screen.getScreens();
+	    	if (monitores.size() == 1) {
+	            System.out.println("Se necesitan al menos 2 monitores");
+	            return;
+	        }
+	    	System.out.println("entra el metodo iniciarsecuenciavideo");
+	        
 
 	        Screen segundoMonitor = monitores.get(0); // carpincho
 	        Screen tercerMonitor = monitores.get(1);  // interferencia + augutsen
 
 	        // --------- Video 1: Cucarachón ----------
-	        URL url1 = getClass().getResource("/videos/01_cucarachonCuentaSuPlanMalvado.mp4");
+	        URL url1 = getClass().getResource("/videos/AutgutsenPresentacion.mp4");
 	        if (url1 == null) {
 	            System.err.println("Error: video 1 no encontrado.");
 	            return;
@@ -141,14 +147,16 @@ public class VideoMonitor {
 	        stage1.setY(dim1.getMinY());
 	        stage1.setWidth(dim1.getWidth());
 	        stage1.setHeight(dim1.getHeight());
-
+	        stage1.setFullScreen(true);
+	        
 	        // --------- Video 2: Interferencia ----------
 	        URL url2 = getClass().getResource("/videos/interferencia.mp4");
 	        if (url2 == null) {
 	            System.err.println("Error: video 2 no encontrado.");
 	            return;
 	        }
-
+	        
+	        
 	        Media media2 = new Media(url2.toExternalForm());
 	        media2.setOnError(() -> {
 	            System.err.println("Error en media2: " + media2.getError());
@@ -166,8 +174,7 @@ public class VideoMonitor {
 	        });
 	        
 	        
-	        player2.statusProperty().addListener((obs, oldStatus, newStatus) -> 
-	            System.out.println("Estado player2: " + newStatus));
+	        
 
 	        MediaView view2 = new MediaView(player2);
 	        view2.setFitWidth(1280); // Por ejemplo, Full HD width
@@ -181,6 +188,7 @@ public class VideoMonitor {
 	        stage2.setY(dim2.getMinY());
 	        stage2.setWidth(dim2.getWidth());
 	        stage2.setHeight(dim2.getHeight());
+	        stage2.setFullScreen(true);
 
 	        // --------- Video 3: Carpincho ----------
 	        URL url3 = getClass().getResource("/videos/carpinchoFInal.mp4");
@@ -205,14 +213,19 @@ public class VideoMonitor {
 	        stage3.setY(dim3.getMinY());
 	        stage3.setWidth(dim3.getWidth());
 	        stage3.setHeight(dim3.getHeight());
-
+	        stage3.setFullScreen(true);
 	        // --------- Encadenamiento ---------
 
 	        player1.setOnEndOfMedia(() -> {
 	            //stage1.close();
 	          //  imagen.mostrarImagenEnSegundoMonitor();
+	        	player1.dispose();
+	        	stage1.close();
 	            stage2.show();
-
+	            System.out.println("termino video 1");
+	            System.out.println("estado player 2" + player2.getStatus());
+	            
+	            
 	            if (player2.getStatus() == MediaPlayer.Status.READY) {
 	                System.out.println("Video 2 ya estaba listo, reproduciendo.");
 	                player2.play();
@@ -232,6 +245,9 @@ public class VideoMonitor {
 	            player2.dispose();
 	            
 	            stage3.show();
+	            
+	            System.out.println("termino video 2");
+	            System.out.println("estado player 3" + player3.getStatus());
 
 	            if (player3.getStatus() == MediaPlayer.Status.READY) {
 	                System.out.println("Video 3 ya estaba listo, reproduciendo.");
@@ -260,11 +276,11 @@ public class VideoMonitor {
 public void iniciarVideoEnSegundoMonitor(String urlVideo) {
 	    Platform.runLater(() -> {
 	        var monitores = Screen.getScreens();
-	     //   if (monitores.size() > 1) {
-	      //      System.out.println("Se necesitan al menos 2 monitores");
-	      //      return;
-	      //  }
-
+	        if (monitores.size() == 1) {
+	            System.out.println("Se necesitan al menos 2 monitores");
+	            return;
+	        }
+	        
 	        Screen segundoMonitor = monitores.get(1);
 	        Rectangle2D dimensiones = segundoMonitor.getBounds();
 
@@ -275,6 +291,7 @@ public void iniciarVideoEnSegundoMonitor(String urlVideo) {
 	        	_segundoMonitor.setY(dimensiones.getMinY());
 	        	_segundoMonitor.setWidth(dimensiones.getWidth());
 	        	_segundoMonitor.setHeight(dimensiones.getHeight());
+	        	_segundoMonitor.setFullScreen(true);
 	        }
 
 	        // Si ya hay un reproductor, detener y liberar recursos
