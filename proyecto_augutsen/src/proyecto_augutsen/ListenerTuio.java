@@ -102,10 +102,10 @@ public class ListenerTuio implements TuioListener {
                         imageV.setPickOnBounds(true);
                         imageV.setMouseTransparent(false);
                         System.out.println("holaaaa");
-                        imageV.setOnMouseClicked(event -> {
+                      
                             System.out.println("👉 Click detectado sobre imagen ID: " + id_simbolo);
                             imagenV.validarSeleccionUsuario(id_simbolo);
-                        });
+                   
                     }
                 }
                 // ID 3 en cuadrante inferior izquierdo para rotación
@@ -199,10 +199,10 @@ public class ListenerTuio implements TuioListener {
                             imageV.setVisible(true);
                             imageV.setX(x * this._contenedor.getWidth());
                             imageV.setY(y * this._contenedor.getHeight());
-                            imageV.setOnMouseClicked(event -> {
+                      
                                 System.out.println("👉 Click detectado sobre imagen ID: " + id_simbolo);
                                 imagenV.validarSeleccionUsuario(id_simbolo);
-                            });
+                           
                         } else {
                             imageV.setVisible(false);
                         }

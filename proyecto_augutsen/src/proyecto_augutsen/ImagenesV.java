@@ -178,19 +178,7 @@ public class ImagenesV {
     }
 
 
-    public void IconoEnojoBien() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-27.png").toExternalForm());
-        ImageView imageView = new ImageView(img);
 
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
-        imageView.setScaleX(1.3);
-        imageView.setLayoutX(1380);
-        imageView.setLayoutY(200);
-        imageView.setVisible(true);
-        imageView.setId("emocion7");
-        this._contenedor.getChildren().add(imageView);
-    }
     public void IconoEnojoMal() {
         Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-20.png").toExternalForm());
         ImageView imageView = new ImageView(img);
@@ -206,20 +194,7 @@ public class ImagenesV {
     }
     
     
-    public void IconoDesagradoeBien() {
-        Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-26.png").toExternalForm());
-        ImageView imageView = new ImageView(img);
 
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
-        imageView.setScaleX(1.3);
-        imageView.setLayoutX(1200);
-        imageView.setLayoutY(200);
-        imageView.setVisible(true);
-        imageView.setId("emocion10");
-        this._contenedor.getChildren().add(imageView);
-    }
-    
     public void IconoDesagradoeMal() {
         Image img = new Image(getClass().getResource("/imagenes/Sala de escape 2025-21.png").toExternalForm());
         ImageView imageView = new ImageView(img);
@@ -238,12 +213,12 @@ public class ImagenesV {
         double x = 0, y = 0;
 
         switch(id) {
-            case 6: x = 1680; y = 400; break;
-            case 7: x = 1520; y = 400; break;
-            case 8: x = 1680; y = 300; break;
-            case 9: x = 1600; y = 400; break;
-            case 10: x = 1600; y = 300; break;
-            case 11: x = 1520; y = 300; break;
+            case 6: x = 1200; y = 300; break;
+            case 7: x = 1300; y = 200; break;
+            case 8: x = 1100; y = 300; break;
+            case 9: x = 1300; y = 300; break;
+            case 10: x = 1100; y = 200; break;
+            case 11: x = 1200; y = 200; break;
             default:
                 System.out.println("ID no reconocido: " + id);
                 return;
@@ -263,10 +238,10 @@ public class ImagenesV {
         // Elegir ruta según id y emoción
         String rutaImagen = switch(id) {
             case 6-> bien ? "/imagenes/Sala de escape 2025-24.png" : "/imagenes/Sala de escape 2025-18.png";
-            case 7 -> bien ? "/imagenes/Sala de escape 2025-27.png" : "/imagenes/Sala de escape 2025-20.png";
+            case 7 -> bien ? "/imagenes/Sala de escape 2025-26.png" : "/imagenes/Sala de escape 2025-20.png";
             case 8 -> bien ? "/imagenes/Sala de escape 2025-22.png" : "/imagenes/Sala de escape 2025-16.png";
             case 9 -> bien ? "/imagenes/Sala de escape 2025-25.png" : "/imagenes/Sala de escape 2025-19.png";
-            case 10 -> bien ? "/imagenes/Sala de escape 2025-26.png" : "/imagenes/Sala de escape 2025-21.png";
+            case 10 -> bien ? "/imagenes/Sala de escape 2025-27.png" : "/imagenes/Sala de escape 2025-21.png";
             case 11 -> bien ? "/imagenes/Sala de escape 2025-23.png" : "/imagenes/Sala de escape 2025-17.png";
             default -> null;
         };
