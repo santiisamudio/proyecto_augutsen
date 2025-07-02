@@ -387,7 +387,7 @@ public class ImagenesV {
             this.imagenEmocionActual = "alegria";
             this.EmocionPanel("/imagenes/Sala de escape 2025-33.png");
             this.Barra("/imagenes/Sala de escape 2025-07.png");
-            this._videos.reproducirVideoEmocion("alegria");
+          // this._videos.reproducirVideoEmocion("alegria");
         } else if (angulo >= 60 && angulo < 120) {
             this.imagenEmocionActual = "enojo";
             this.Barra("/imagenes/Sala de escape 2025-05.png");
